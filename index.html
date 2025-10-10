@@ -216,6 +216,8 @@
             opacity: 0;
             animation: fadeInUp 1s ease-out 2.2s forwards;
             font-weight: 600;
+            position: relative;
+            z-index: 100;
         }
 
         @keyframes fadeInUp {
@@ -237,6 +239,8 @@
             letter-spacing: -0.05em;
             opacity: 0;
             animation: fadeInUp 1s ease-out 2.4s forwards;
+            position: relative;
+            z-index: 100;
         }
 
         .hero-title .line {
@@ -264,6 +268,8 @@
             opacity: 0;
             animation: fadeInUp 1s ease-out 2.6s forwards;
             font-weight: 300;
+            position: relative;
+            z-index: 100;
         }
 
         .hero-cta {
@@ -272,7 +278,7 @@
             opacity: 0;
             animation: fadeInUp 1s ease-out 2.8s forwards;
             position: relative;
-            z-index: 10;
+            z-index: 100;
         }
 
         .btn {
@@ -289,6 +295,7 @@
             text-decoration: none;
             display: inline-block;
             font-family: 'Inter', sans-serif;
+            z-index: 100;
         }
 
         .btn-primary {
@@ -308,6 +315,7 @@
             border-radius: 50%;
             transform: translate(-50%, -50%);
             transition: width 0.6s ease, height 0.6s ease;
+            z-index: -1;
         }
 
         .btn-primary:hover::before {
@@ -317,7 +325,7 @@
 
         .btn-primary span {
             position: relative;
-            z-index: 1;
+            z-index: 2;
         }
 
         .btn-secondary {
@@ -329,6 +337,11 @@
         .btn-secondary:hover {
             border-color: var(--accent);
             color: var(--accent);
+        }
+
+        .btn-secondary span {
+            position: relative;
+            z-index: 2;
         }
 
         /* Scroll Indicator */
@@ -759,11 +772,21 @@
             }
 
             .section {
-                padding: 0 2rem;
+                padding: 6rem 2rem;
             }
 
             nav {
                 padding: 2rem;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
             }
         }
 
