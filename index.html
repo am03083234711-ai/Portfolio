@@ -1,1425 +1,223 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ahmed Masood — Revenue Architect</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #000000;
-            --accent: #00fff5;
-            --accent2: #ff006e;
-            --text: #ffffff;
-            --text-dim: #666666;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--primary);
-            color: var(--text);
-            overflow-x: hidden;
-            cursor: none;
-        }
-
-        /* Custom Cursor */
-        #cursor {
-            position: fixed;
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--accent);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 10000;
-            transition: all 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            mix-blend-mode: difference;
-        }
-
-        #cursor-follower {
-            position: fixed;
-            width: 60px;
-            height: 60px;
-            border: 1px solid rgba(0, 255, 245, 0.3);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            mix-blend-mode: difference;
-        }
-
-        .cursor-hover #cursor {
-            width: 60px;
-            height: 60px;
-            background: rgba(0, 255, 245, 0.1);
-        }
-
-        /* Loader */
-        #loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: #000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        #loader.fade-out {
-            animation: fadeOut 1s ease-out forwards;
-        }
-
-        @keyframes fadeOut {
-            to {
-                opacity: 0;
-                pointer-events: none;
-            }
-        }
-
-        .loader-counter {
-            font-size: 8rem;
-            font-weight: 800;
-            font-family: 'JetBrains Mono', monospace;
-            background: linear-gradient(45deg, var(--accent), var(--accent2));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -0.05em;
-        }
-
-        .loader-text {
-            font-size: 0.875rem;
-            letter-spacing: 0.5em;
-            text-transform: uppercase;
-            color: var(--text-dim);
-            font-weight: 500;
-        }
-
-        /* Canvas */
-        #webgl-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            padding: 2rem 4rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            opacity: 0;
-            transform: translateY(-20px);
-            animation: slideDown 0.8s ease-out 2s forwards;
-        }
-
-        @keyframes slideDown {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .logo {
-            font-size: 1rem;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            font-family: 'Inter', sans-serif;
-            color: var(--text);
-        }
-
-        .nav-menu {
-            display: flex;
-            gap: 3rem;
-            list-style: none;
-            font-size: 0.75rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        .nav-menu a {
-            color: inherit;
-            text-decoration: none;
-            position: relative;
-            transition: opacity 0.3s ease;
-        }
-
-        .nav-menu a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background: var(--accent);
-            transition: width 0.3s ease;
-        }
-
-        .nav-menu a:hover::after {
-            width: 100%;
-        }
-
-        /* Content Sections */
-        .section {
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 8rem 4rem;
-            z-index: 1;
-        }
-
-        .section-content {
-            max-width: 1400px;
-            width: 100%;
-        }
-
-        /* Hero */
-        #hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding-top: 8rem;
-            padding-bottom: 4rem;
-        }
-
-        .hero-label {
-            font-size: 0.75rem;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 1.5rem;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 2.2s forwards;
-            font-weight: 600;
-            position: relative;
-            z-index: 100;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero-title {
-            font-size: clamp(3rem, 8vw, 9rem);
-            font-weight: 900;
-            line-height: 0.9;
-            margin-bottom: 2rem;
-            letter-spacing: -0.05em;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 2.4s forwards;
-            position: relative;
-            z-index: 100;
-        }
-
-        .hero-title .line {
-            display: block;
-            overflow: hidden;
-        }
-
-        .hero-title .word {
-            display: inline-block;
-        }
-
-        .gradient-text {
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-description {
-            font-size: clamp(1rem, 2vw, 1.5rem);
-            max-width: 800px;
-            color: var(--text-dim);
-            line-height: 1.8;
-            margin-bottom: 2.5rem;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 2.6s forwards;
-            font-weight: 300;
-            position: relative;
-            z-index: 100;
-        }
-
-        .hero-cta {
-            display: flex;
-            gap: 2rem;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 2.8s forwards;
-            position: relative;
-            z-index: 100;
-        }
-
-        .btn {
-            padding: 1.5rem 3rem;
-            font-size: 0.875rem;
-            font-weight: 600;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            border: none;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            font-family: 'Inter', sans-serif;
-            z-index: 100;
-        }
-
-        .btn-primary {
-            background: var(--accent);
-            color: #000;
-            box-shadow: 0 0 40px rgba(0, 255, 245, 0.4);
-        }
-
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: var(--accent2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.6s ease, height 0.6s ease;
-            z-index: -1;
-        }
-
-        .btn-primary:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .btn-primary span {
-            position: relative;
-            z-index: 2;
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--text);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-        }
-
-        .btn-secondary span {
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Scroll Indicator */
-        .scroll-indicator {
-            position: absolute;
-            bottom: 4rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-            opacity: 0;
-            animation: fadeInUp 1s ease-out 3s forwards;
-        }
-
-        .scroll-text {
-            font-size: 0.625rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--text-dim);
-            font-weight: 600;
-        }
-
-        .scroll-line {
-            width: 1px;
-            height: 60px;
-            background: linear-gradient(to bottom, var(--accent), transparent);
-            animation: scrollAnimation 2s ease-in-out infinite;
-        }
-
-        @keyframes scrollAnimation {
-            0%, 100% {
-                transform: translateY(0);
-                opacity: 1;
-            }
-            50% {
-                transform: translateY(20px);
-                opacity: 0;
-            }
-        }
-
-        /* Problem Section */
-        #problem {
-            background: linear-gradient(180deg, #000000 0%, #0a0a0a 100%);
-        }
-
-        .section-header {
-            margin-bottom: 6rem;
-            padding-top: 2rem;
-        }
-
-        .section-label {
-            font-size: 0.75rem;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: var(--accent);
-            margin-bottom: 1.5rem;
-            display: block;
-            font-weight: 600;
-        }
-
-        .section-title {
-            font-size: clamp(3rem, 6vw, 6rem);
-            font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -0.03em;
-            margin-bottom: 2rem;
-        }
-
-        .section-description {
-            font-size: clamp(1rem, 2vw, 1.25rem);
-            color: var(--text-dim);
-            max-width: 700px;
-            line-height: 1.8;
-            font-weight: 300;
-        }
-
-        .problem-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-        }
-
-        .problem-card {
-            padding: 3rem;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .problem-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-
-        .problem-card:hover::before {
-            opacity: 0.05;
-        }
-
-        .problem-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(0, 255, 245, 0.3);
-        }
-
-        .problem-number {
-            font-size: 5rem;
-            font-weight: 900;
-            font-family: 'JetBrains Mono', monospace;
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1;
-            margin-bottom: 2rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .problem-card h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .problem-card p {
-            color: var(--text-dim);
-            line-height: 1.8;
-            position: relative;
-            z-index: 1;
-            font-weight: 300;
-        }
-
-        /* Protocol Section */
-        #protocol {
-            background: #000;
-        }
-
-        .protocol-timeline {
-            position: relative;
-            padding-left: 8rem;
-        }
-
-        .protocol-timeline::before {
-            content: '';
-            position: absolute;
-            left: 3rem;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: linear-gradient(to bottom, var(--accent), transparent);
-        }
-
-        .protocol-step {
-            position: relative;
-            margin-bottom: 8rem;
-            opacity: 0;
-            transform: translateX(-50px);
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .protocol-step.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .protocol-step::before {
-            content: '';
-            position: absolute;
-            left: -5.5rem;
-            top: 0;
-            width: 20px;
-            height: 20px;
-            background: var(--accent);
-            border-radius: 50%;
-            box-shadow: 0 0 30px var(--accent);
-        }
-
-        .protocol-number {
-            font-size: 8rem;
-            font-weight: 900;
-            font-family: 'JetBrains Mono', monospace;
-            line-height: 1;
-            opacity: 0.1;
-            position: absolute;
-            left: -2rem;
-            top: -2rem;
-            z-index: 0;
-        }
-
-        .protocol-step h3 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 1.5rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        .protocol-step p {
-            font-size: 1.125rem;
-            color: var(--text-dim);
-            line-height: 1.8;
-            max-width: 600px;
-            position: relative;
-            z-index: 1;
-            font-weight: 300;
-        }
-
-        /* Results Section */
-        #results {
-            background: linear-gradient(180deg, #000000 0%, #0a0a0a 100%);
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 4rem;
-            margin-bottom: 8rem;
-        }
-
-        .stat-card {
-            text-align: center;
-            position: relative;
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: -2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--accent), transparent);
-        }
-
-        .stat-number {
-            font-size: clamp(4rem, 8vw, 8rem);
-            font-weight: 900;
-            font-family: 'JetBrains Mono', monospace;
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1;
-            margin-bottom: 1rem;
-        }
-
-        .stat-label {
-            font-size: 0.875rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--text-dim);
-            font-weight: 600;
-        }
-
-        .testimonial {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 4rem;
-            background: rgba(255, 255, 255, 0.02);
-            border-left: 3px solid var(--accent);
-            position: relative;
-        }
-
-        .testimonial::before {
-            content: '"';
-            position: absolute;
-            top: 2rem;
-            left: 2rem;
-            font-size: 10rem;
-            font-weight: 900;
-            opacity: 0.05;
-            line-height: 1;
-            font-family: 'JetBrains Mono', monospace;
-        }
-
-        .testimonial-text {
-            font-size: 1.5rem;
-            line-height: 1.8;
-            margin-bottom: 2rem;
-            font-weight: 300;
-            font-style: italic;
-        }
-
-        .testimonial-author {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--accent);
-        }
-
-        .testimonial-role {
-            font-size: 0.875rem;
-            color: var(--text-dim);
-            font-weight: 400;
-        }
-
-        /* Tech Section */
-        #tech {
-            background: #000;
-        }
-
-        .tech-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-        }
-
-        .tech-item {
-            padding: 3rem 2rem;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .tech-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .tech-item:hover::before {
-            opacity: 0.1;
-        }
-
-        .tech-item:hover {
-            transform: translateY(-10px) scale(1.05);
-            border-color: rgba(0, 255, 245, 0.3);
-        }
-
-        .tech-name {
-            font-size: 1.125rem;
-            font-weight: 700;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* CTA Section */
-        #cta {
-            background: linear-gradient(180deg, #0a0a0a 0%, #000000 100%);
-            text-align: center;
-        }
-
-        .cta-title {
-            font-size: clamp(3rem, 6vw, 6rem);
-            font-weight: 900;
-            line-height: 1.1;
-            letter-spacing: -0.03em;
-            margin-bottom: 2rem;
-        }
-
-        .cta-description {
-            font-size: 1.25rem;
-            color: var(--text-dim);
-            max-width: 700px;
-            margin: 0 auto 3rem;
-            line-height: 1.8;
-            font-weight: 300;
-        }
-
-        .cta-note {
-            margin-top: 1.5rem;
-            font-size: 0.875rem;
-            color: var(--text-dim);
-        }
-
-        /* Footer */
-        footer {
-            padding: 4rem;
-            text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: 0.875rem;
-            color: var(--text-dim);
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            list-style: none;
-            margin-bottom: 2rem;
-        }
-
-        .footer-links a {
-            color: var(--text-dim);
-            text-decoration: none;
-            font-size: 0.75rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            font-weight: 600;
-            transition: color 0.3s ease;
-        }
-
-        .footer-links a:hover {
-            color: var(--accent);
-        }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .problem-grid,
-            .stats-grid,
-            .tech-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .protocol-timeline {
-                padding-left: 4rem;
-            }
-
-            .section {
-                padding: 6rem 2rem;
-            }
-
-            nav {
-                padding: 2rem;
-            }
-
-            .hero-cta {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .btn {
-                width: 100%;
-                text-align: center;
-            }
-        }
-
-        /* Reveal Animation */
-        .reveal {
-            opacity: 0;
-            transform: translateY(100px);
-            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
-</head>
-<body>
-    <!-- Custom Cursor -->
-    <div id="cursor"></div>
-    <div id="cursor-follower"></div>
-
-    <!-- Loader -->
-    <div id="loader">
-        <div class="loader-counter">0</div>
-        <div class="loader-text">INITIALIZING</div>
-    </div>
-
-    <!-- WebGL Canvas -->
-    <canvas id="webgl-canvas"></canvas>
-
-    <!-- Navigation -->
-    <nav>
-        <div class="logo">AHMED MASOOD</div>
-        <ul class="nav-menu">
-            <li><a href="#problem">Problem</a></li>
-            <li><a href="#protocol">Process</a></li>
-            <li><a href="#results">Results</a></li>
-            <li><a href="#cta">Contact</a></li>
-        </ul>
-    </nav>
-
-    <!-- Hero Section -->
-    <section id="hero">
-        <div class="section-content">
-            <div class="hero-label">REVOPS ARCHITECT • GHL SPECIALIST</div>
-            <h1 class="hero-title">
-                <span class="line">REVENUE IS</span>
-                <span class="line">NOT A GOAL.</span>
-                <span class="line">IT'S A <span class="gradient-text">SYSTEM</span>.</span>
-            </h1>
-            <p class="hero-description">
-                I architect autonomous revenue systems on GoHighLevel that eliminate chaos, synchronize operations, and generate predictable growth through precision engineering—not hope.
-            </p>
-            <div class="hero-cta">
-                <a href="#cta" class="btn btn-primary"><span>SCHEDULE BLUEPRINT CALL</span></a>
-                <a href="#protocol" class="btn btn-secondary"><span>VIEW PROCESS</span></a>
-            </div>
-        </div>
-        <div class="scroll-indicator">
-            <span class="scroll-text">Scroll</span>
-            <div class="scroll-line"></div>
-        </div>
-    </section>
-
-    <!-- Problem Section -->
-    <section id="problem" class="section">
-        <div class="section-content">
-            <div class="section-header reveal">
-                <span class="section-label">THE DISCONNECT</span>
-                <h2 class="section-title">The Chaos of<br>Disconnection</h2>
-                <p class="section-description">
-                    Revenue leakage doesn't happen from lack of leads. It happens from systemic entropy—fragmented tools, manual processes, and organizational silos.
-                </p>
-            </div>
-            <div class="problem-grid">
-                <div class="problem-card reveal">
-                    <div class="problem-number">01</div>
-                    <h3>Lost Leads</h3>
-                    <p>Your CRM is a black hole where leads vanish into manual follow-up chaos, forgotten spreadsheets, and human error.</p>
-                </div>
-                <div class="problem-card reveal">
-                    <div class="problem-number">02</div>
-                    <h3>Siloed Teams</h3>
-                    <p>Sales and marketing operate independently with no shared data, no unified strategy—just duplicate work and missed opportunities.</p>
-                </div>
-                <div class="problem-card reveal">
-                    <div class="problem-number">03</div>
-                    <h3>Manual Bottlenecks</h3>
-                    <p>Your team drowns in repetitive tasks. Time that should close deals is wasted on data entry and administrative overhead.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Protocol Section -->
-    <section id="protocol" class="section">
-        <div class="section-content">
-            <div class="section-header reveal">
-                <span class="section-label">THE SOLUTION</span>
-                <h2 class="section-title">The Architectural<br>Protocol</h2>
-                <p class="section-description">
-                    A systematic, four-phase methodology to engineer your revenue operating system from foundation to optimization.
-                </p>
-            </div>
-            <div class="protocol-timeline">
-                <div class="protocol-step">
-                    <div class="protocol-number">01</div>
-                    <h3>Audit & Blueprint</h3>
-                    <p>Deep-dive diagnostic of your entire GoHighLevel ecosystem. I map every data flow, identify bottlenecks, and create a comprehensive architectural blueprint for a flawless, scalable system.</p>
-                </div>
-                <div class="protocol-step">
-                    <div class="protocol-number">02</div>
-                    <h3>Core Buildout</h3>
-                    <p>With the blueprint as our guide, I construct your advanced CRM, custom pipelines, and automated lead lifecycle stages. This is the foundation of your revenue operating system.</p>
-                </div>
-                <div class="protocol-step">
-                    <div class="protocol-number">03</div>
-                    <h3>System Integration</h3>
-                    <p>I build an API and webhook mesh that syncs GHL with your critical tools in real-time, creating a zero-latency data environment where every system is perfectly synchronized.</p>
-                </div>
-                <div class="protocol-step">
-                    <div class="protocol-number">04</div>
-                    <h3>AI & Optimization</h3>
-                    <p>The final layer. I deploy AI agents for intelligent lead scoring, automated outreach, and 24/7 appointment setting—ensuring your system learns, adapts, and optimizes continuously.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Results Section -->
-    <section id="results" class="section">
-        <div class="section-content">
-            <div class="section-header reveal">
-                <span class="section-label">PROVEN IMPACT</span>
-                <h2 class="section-title">System Deployed.<br>Results Quantified.</h2>
-            </div>
-            <div class="stats-grid">
-                <div class="stat-card reveal">
-                    <div class="stat-number" data-target="250">0</div>
-                    <div class="stat-label">% Lead-to-Close Increase</div>
-                </div>
-                <div class="stat-card reveal">
-                    <div class="stat-number" data-target="45">0</div>
-                    <div class="stat-label">% Sales Cycle Reduction</div>
-                </div>
-                <div class="stat-card reveal">
-                    <div class="stat-number" data-target="99.8">0</div>
-                    <div class="stat-label">% System Uptime</div>
-                </div>
-            </div>
-            <div class="testimonial reveal">
-                <p class="testimonial-text">
-                    "Ahmed didn't just 'fix' our GHL—he re-engineered our entire client acquisition process. The system he built is now the most valuable asset in our company. We scaled 3x without adding a single team member."
-                </p>
-                <div class="testimonial-author">Marcus Chen</div>
-                <div class="testimonial-role">CEO, FinTech SaaS</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Tech Section -->
-    <section id="tech" class="section">
-        <div class="section-content">
-            <div class="section-header reveal">
-                <span class="section-label">TECHNOLOGY STACK</span>
-                <h2 class="section-title">The GoHighLevel<br>Operating System</h2>
-                <p class="section-description">
-                    I transform GoHighLevel from a collection of tools into a unified operating system for your entire business.
-                </p>
-            </div>
-            <div class="tech-grid">
-                <div class="tech-item reveal"><div class="tech-name">GoHighLevel</div></div>
-                <div class="tech-item reveal"><div class="tech-name">Zapier</div></div>
-                <div class="tech-item reveal"><div class="tech-name">Make.com</div></div>
-                <div class="tech-item reveal"><div class="tech-name">OpenAI API</div></div>
-                <div class="tech-item reveal"><div class="tech-name">Webhooks</div></div>
-                <div class="tech-item reveal"><div class="tech-name">Custom APIs</div></div>
-                <div class="tech-item reveal"><div class="tech-name">AI Agents</div></div>
-                <div class="tech-item reveal"><div class="tech-name">Analytics</div></div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section id="cta" class="section">
-        <div class="section-content">
-            <div class="reveal">
-                <h2 class="cta-title">Install Your<br>Revenue OS</h2>
-                <p class="cta-description">
-                    Ready to move beyond temporary fixes and install a permanent solution for growth? Let's architect the future of your business.
-                </p>
-                <a href="https://calendly.com/your-link" class="btn btn-primary"><span>SCHEDULE YOUR BLUEPRINT CALL</span></a>
-                <p class="cta-note">Complimentary 30-minute strategy session • No obligation</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <ul class="footer-links">
-            <li><a href="mailto:your@email.com">Email</a></li>
-            <li><a href="https://linkedin.com/in/yourprofile">LinkedIn</a></li>
-            <li><a href="https://twitter.com/yourhandle">Twitter</a></li>
-        </ul>
-        <div class="copyright">© 2025 Ahmed Masood. All rights reserved.</div>
-    </footer>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script>
-        // ===== CUSTOM CURSOR =====
-        const cursor = document.getElementById('cursor');
-        const follower = document.getElementById('cursor-follower');
-        let mouseX = 0, mouseY = 0;
-        let followerX = 0, followerY = 0;
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
-
-        function animateCursor() {
-            const dx = mouseX - followerX;
-            const dy = mouseY - followerY;
-            followerX += dx * 0.1;
-            followerY += dy * 0.1;
-
-            cursor.style.left = mouseX + 'px';
-            cursor.style.top = mouseY + 'px';
-            follower.style.left = followerX + 'px';
-            follower.style.top = followerY + 'px';
-
-            requestAnimationFrame(animateCursor);
-        }
-        animateCursor();
-
-        // Cursor hover effects
-        const hoverElements = document.querySelectorAll('a, button, .problem-card, .tech-item');
-        hoverElements.forEach(el => {
-            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-        });
-
-        // ===== LOADER =====
-        let count = 0;
-        const loaderCounter = document.querySelector('.loader-counter');
-        const loader = document.getElementById('loader');
-
-        const counterInterval = setInterval(() => {
-            count += Math.floor(Math.random() * 15) + 5;
-            if (count >= 100) {
-                count = 100;
-                clearInterval(counterInterval);
-                setTimeout(() => {
-                    loader.classList.add('fade-out');
-                    document.body.style.overflow = 'auto';
-                }, 500);
-            }
-            loaderCounter.textContent = count;
-        }, 100);
-
-        // ===== THREE.JS SCENE =====
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({
-            canvas: document.getElementById('webgl-canvas'),
-            antialias: true,
-            alpha: true
-        });
-
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        camera.position.z = 5;
-
-        // Create fluid particle system
-        const particleCount = 15000;
-        const positions = new Float32Array(particleCount * 3);
-        const velocities = [];
-
-        for (let i = 0; i < particleCount; i++) {
-            positions[i * 3] = (Math.random() - 0.5) * 20;
-            positions[i * 3 + 1] = (Math.random() - 0.5) * 20;
-            positions[i * 3 + 2] = (Math.random() - 0.5) * 20;
-            
-            velocities.push({
-                x: (Math.random() - 0.5) * 0.02,
-                y: (Math.random() - 0.5) * 0.02,
-                z: (Math.random() - 0.5) * 0.02
-            });
-        }
-
-        const particleGeometry = new THREE.BufferGeometry();
-        particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-
-        const particleMaterial = new THREE.PointsMaterial({
-            size: 0.015,
-            color: 0x00fff5,
-            transparent: true,
-            opacity: 0.6,
-            blending: THREE.AdditiveBlending,
-            depthWrite: false
-        });
-
-        const particles = new THREE.Points(particleGeometry, particleMaterial);
-        scene.add(particles);
-
-        // Create central geometric forms
-        const geometries = [];
-        const materials = [];
-        const meshes = [];
-
-        // Icosahedron
-        const geo1 = new THREE.IcosahedronGeometry(1.5, 1);
-        const mat1 = new THREE.MeshBasicMaterial({
-            color: 0x00fff5,
-            wireframe: true,
-            transparent: true,
-            opacity: 0.3
-        });
-        const mesh1 = new THREE.Mesh(geo1, mat1);
-        scene.add(mesh1);
-        meshes.push(mesh1);
-
-        // Torus
-        const geo2 = new THREE.TorusGeometry(1.8, 0.3, 16, 100);
-        const mat2 = new THREE.MeshBasicMaterial({
-            color: 0xff006e,
-            wireframe: true,
-            transparent: true,
-            opacity: 0.2
-        });
-        const mesh2 = new THREE.Mesh(geo2, mat2);
-        mesh2.rotation.x = Math.PI / 4;
-        scene.add(mesh2);
-        meshes.push(mesh2);
-
-        // Sphere
-        const geo3 = new THREE.SphereGeometry(2, 32, 32);
-        const mat3 = new THREE.MeshBasicMaterial({
-            color: 0x00fff5,
-            wireframe: true,
-            transparent: true,
-            opacity: 0.1
-        });
-        const mesh3 = new THREE.Mesh(geo3, mat3);
-        scene.add(mesh3);
-        meshes.push(mesh3);
-
-        // Mouse interaction
-        let targetX = 0, targetY = 0;
-        document.addEventListener('mousemove', (e) => {
-            targetX = (e.clientX / window.innerWidth) * 2 - 1;
-            targetY = -(e.clientY / window.innerHeight) * 2 + 1;
-        });
-
-        // Scroll-based effects
-        let scrollProgress = 0;
-        window.addEventListener('scroll', () => {
-            scrollProgress = window.pageYOffset / (document.body.scrollHeight - window.innerHeight);
-        });
-
-        // Animation loop
-        let time = 0;
-        function animate() {
-            requestAnimationFrame(animate);
-            time += 0.01;
-
-            // Animate particles with flow field
-            const positions = particleGeometry.attributes.position.array;
-            for (let i = 0; i < particleCount; i++) {
-                const i3 = i * 3;
-                
-                // Flow field movement
-                positions[i3] += velocities[i].x;
-                positions[i3 + 1] += velocities[i].y;
-                positions[i3 + 2] += velocities[i].z;
-
-                // Boundary wrapping
-                if (Math.abs(positions[i3]) > 10) velocities[i].x *= -1;
-                if (Math.abs(positions[i3 + 1]) > 10) velocities[i].y *= -1;
-                if (Math.abs(positions[i3 + 2]) > 10) velocities[i].z *= -1;
-
-                // Add wave motion
-                positions[i3 + 1] += Math.sin(time + positions[i3] * 0.5) * 0.003;
-            }
-            particleGeometry.attributes.position.needsUpdate = true;
-
-            // Rotate particles
-            particles.rotation.y = time * 0.05;
-            particles.rotation.x = Math.sin(time * 0.3) * 0.2;
-
-            // Animate meshes
-            meshes[0].rotation.x = time * 0.3;
-            meshes[0].rotation.y = time * 0.2;
-            
-            meshes[1].rotation.z = time * 0.15;
-            meshes[1].rotation.y = time * 0.1;
-            
-            meshes[2].rotation.y = time * 0.1;
-            meshes[2].rotation.z = Math.sin(time * 0.5) * 0.3;
-
-            // Scale based on scroll
-            const scale = 1 + scrollProgress * 0.5;
-            meshes.forEach(mesh => {
-                mesh.scale.setScalar(scale);
-            });
-
-            // Color shift based on scroll
-            const hue = scrollProgress * 360;
-            particleMaterial.color.setHSL(hue / 360, 1, 0.5);
-
-            // Camera movement
-            camera.position.x += (targetX * 2 - camera.position.x) * 0.05;
-            camera.position.y += (targetY * 2 - camera.position.y) * 0.05;
-            camera.lookAt(scene.position);
-
-            // Camera zoom based on scroll
-            camera.position.z = 5 + scrollProgress * 3;
-
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        // Window resize
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        // ===== SCROLL REVEAL ANIMATIONS =====
-        const observerOptions = {
-            threshold: 0.15,
-            rootMargin: '0px 0px -100px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-        document.querySelectorAll('.protocol-step').forEach(el => observer.observe(el));
-
-        // ===== ANIMATED COUNTERS =====
-        const animateCounter = (element) => {
-            const target = parseFloat(element.getAttribute('data-target'));
-            const duration = 2500;
-            const increment = target / (duration / 16);
-            let current = 0;
-            let hasDecimal = target % 1 !== 0;
-
-            const updateCounter = () => {
-                current += increment;
-                if (current < target) {
-                    if (hasDecimal) {
-                        element.textContent = current.toFixed(1);
-                    } else {
-                        element.textContent = Math.floor(current);
-                    }
-                    requestAnimationFrame(updateCounter);
-                } else {
-                    if (hasDecimal) {
-                        element.textContent = target.toFixed(1);
-                    } else {
-                        element.textContent = target;
-                    }
-                }
-            };
-            updateCounter();
-        };
-
-        const statObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && !entry.target.classList.contains('counted')) {
-                    entry.target.classList.add('counted');
-                    animateCounter(entry.target);
-                }
-            });
-        }, { threshold: 0.5 });
-
-        document.querySelectorAll('.stat-number').forEach(el => statObserver.observe(el));
-
-        // ===== SMOOTH SCROLL =====
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-
-        // ===== PARALLAX EFFECT =====
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const heroContent = document.querySelector('#hero .section-content');
-            if (heroContent) {
-                heroContent.style.transform = `translateY(${scrolled * 0.5}px)`;
-                heroContent.style.opacity = 1 - scrolled / 800;
-            }
-        });
-
-        // ===== MAGNETIC BUTTON EFFECT =====
-        document.querySelectorAll('.btn').forEach(btn => {
-            btn.addEventListener('mousemove', (e) => {
-                const rect = btn.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
-                
-                btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
-            });
-            
-            btn.addEventListener('mouseleave', () => {
-                btn.style.transform = 'translate(0, 0)';
-            });
-        });
-
-        // ===== PROTOCOL STEP SEQUENTIAL REVEAL =====
-        const protocolSteps = document.querySelectorAll('.protocol-step');
-        const protocolObserver = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.classList.add('visible');
-                    }, index * 200);
-                }
-            });
-        }, { threshold: 0.3 });
-
-        protocolSteps.forEach(step => protocolObserver.observe(step));
-
-        // ===== PROBLEM CARD STAGGER =====
-        const problemCards = document.querySelectorAll('.problem-card');
-        const cardObserver = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.classList.add('active');
-                    }, index * 150);
-                }
-            });
-        }, { threshold: 0.2 });
-
-        problemCards.forEach(card => cardObserver.observe(card));
-
-        // ===== TECH ITEM STAGGER =====
-        const techItems = document.querySelectorAll('.tech-item');
-        const techObserver = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.classList.add('active');
-                    }, index * 100);
-                }
-            });
-        }, { threshold: 0.2 });
-
-        techItems.forEach(item => techObserver.observe(item));
-
-        // ===== PERFORMANCE OPTIMIZATION =====
-        // Reduce particle count on mobile
-        if (window.innerWidth < 768) {
-            particleMaterial.size = 0.02;
-            particles.geometry.setDrawRange(0, particleCount / 3);
-        }
-
-        // Pause animations when tab is not visible
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                renderer.setAnimationLoop(null);
-            } else {
-                renderer.setAnimationLoop(animate);
-            }
-        });
-
-        // ===== SECTION COLOR TRANSITIONS =====
-        const sections = document.querySelectorAll('.section');
-        const sectionObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const sectionId = entry.target.id;
-                    
-                    // Change particle behavior based on section
-                    if (sectionId === 'problem') {
-                        particleMaterial.color.setHex(0xff006e);
-                        velocities.forEach(v => {
-                            v.x *= 1.5;
-                            v.y *= 1.5;
-                            v.z *= 1.5;
-                        });
-                    } else if (sectionId === 'protocol') {
-                        particleMaterial.color.setHex(0x00ff88);
-                        velocities.forEach(v => {
-                            v.x *= 0.7;
-                            v.y *= 0.7;
-                            v.z *= 0.7;
-                        });
-                    } else if (sectionId === 'results') {
-                        particleMaterial.color.setHex(0x00fff5);
-                    } else if (sectionId === 'tech') {
-                        particleMaterial.color.setHex(0x9d4edd);
-                    }
-                }
-            });
-        }, { threshold: 0.5 });
-
-        sections.forEach(section => sectionObserver.observe(section));
-
-        // ===== GLITCH EFFECT ON HERO TITLE =====
-        const heroTitle = document.querySelector('.hero-title');
-        setInterval(() => {
-            if (Math.random() > 0.95) {
-                heroTitle.style.textShadow = `
-                    ${Math.random() * 10 - 5}px ${Math.random() * 10 - 5}px 0 rgba(0, 255, 245, 0.7),
-                    ${Math.random() * 10 - 5}px ${Math.random() * 10 - 5}px 0 rgba(255, 0, 110, 0.7)
-                `;
-                setTimeout(() => {
-                    heroTitle.style.textShadow = 'none';
-                }, 50);
-            }
-        }, 3000);
-
-        // ===== SMOOTH GRADIENT SHIFTS =====
-        let gradientHue = 180;
-        setInterval(() => {
-            gradientHue = (gradientHue + 0.5) % 360;
-            document.documentElement.style.setProperty('--accent', `hsl(${gradientHue}, 100%, 50%)`);
-        }, 100);
-    </script>
-</body>
-</html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ahmed Masood | GoHighLevel funnel portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--sky:#CFE8FF;--sky2:#E8F4FF;--line:#9CCBF3;--ink:#0A1F36;--mute:#47607A;--blue:#2897FC;--y:#F2C503;--g:#17D84C;--grad:linear-gradient(90deg,#F2C503,#2897FC,#17D84C);--ease:cubic-bezier(.22,1,.36,1);color-scheme:light}
+*{box-sizing:border-box;margin:0}html{scroll-behavior:smooth;scroll-padding-top:88px}
+body{text-wrap:pretty;font:400 16px/24px Manrope,system-ui,sans-serif;color:var(--ink);background:#fff linear-gradient(rgba(40,151,252,.07) 1px,transparent 1px) 0 0/28px 28px;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);overflow-x:hidden}
+h1,h2,h3,h4,.dsp{font-family:Manrope,system-ui,sans-serif;font-weight:600;letter-spacing:-.02em;text-wrap:balance}
+.h1{font-size:60px;line-height:60px}.h2{font-size:48px;line-height:48px}.h3{font-size:30px;line-height:36px}.h6{font-size:20px;line-height:28px}
+.sm{font-size:14px;line-height:20px}.xs{font-size:12px;line-height:16px;font-weight:600}.mute{color:var(--mute)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}section{padding:88px 0}
+.gt{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.btn{font:600 16px/24px Manrope,sans-serif;padding:10px 18px;border-radius:12px;border:2px solid var(--ink);background:#fff;color:var(--ink);cursor:pointer;text-decoration:none;display:inline-block;box-shadow:3px 3px 0 var(--ink);transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink)}.btn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
+.btn.cta{background:var(--grad)}.btn.s{font-size:14px;line-height:20px;padding:5px 10px;box-shadow:2px 2px 0 var(--ink)}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.skip{position:absolute;left:16px;top:-64px;background:#fff;padding:8px 12px}.skip:focus{top:16px;z-index:99}
+nav{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:50;display:flex;gap:20px;align-items:center;padding:6px 6px 6px 16px;border-radius:14px;background:rgba(255,255,255,.85);backdrop-filter:blur(14px);border:2px solid var(--ink);width:max-content;max-width:calc(100% - 20px)}
+nav b{font-family:Manrope,system-ui,sans-serif;font-weight:600}nav a:not(.btn){color:var(--mute);text-decoration:none;font-size:14px;font-weight:600}
+.tagl{display:inline-block;padding:3px 10px;border:2px dashed var(--blue);border-radius:8px;background:#fff;color:#1673cc;margin-bottom:14px}
+.pill{display:inline-block;padding:1px 8px;border-radius:6px;background:var(--sky);color:#1362a8;font-size:12px;line-height:16px;font-weight:600;border:1px solid var(--line)}.pill.ok{background:var(--grad);color:var(--ink);border-color:var(--ink)}
+.hero{padding:128px 0 72px;position:relative;overflow:hidden;background:radial-gradient(500px 300px at 85% 10%,rgba(242,197,3,.22),transparent 70%),radial-gradient(500px 300px at 8% 95%,rgba(23,216,76,.15),transparent 70%),linear-gradient(180deg,var(--sky),rgba(207,232,255,0))}
+.hg{display:grid;grid-template-columns:1fr 1.1fr;gap:40px;align-items:center}.hg>*,.proj>*{min-width:0}
+.sub{font-size:18px;line-height:28px;color:var(--mute);margin:20px 0 26px;max-width:540px}.ctas{display:flex;gap:14px;flex-wrap:wrap}
+.fine{margin-top:22px;font-size:12px;line-height:16px;color:var(--mute)}
+.win{background:#fff;border:2px solid var(--ink);border-radius:16px;overflow:hidden;box-shadow:8px 8px 0 var(--blue);max-width:100%}
+.bar{display:flex;gap:6px;align-items:center;padding:8px 12px;background:var(--sky);border-bottom:2px solid var(--ink)}.bar i{width:9px;height:9px;border-radius:50%;background:#fff;border:1.5px solid var(--ink)}.bar span{margin-left:8px;background:#fff;border-radius:8px;padding:2px 12px;font-size:12px;line-height:16px;color:var(--mute);flex:1;max-width:270px;overflow:hidden;white-space:nowrap}
+.body{padding:14px;display:grid;gap:10px}
+.app{display:grid;grid-template-columns:128px 1fr;min-height:350px;font-size:12px;line-height:16px}
+.side{background:var(--ink);color:#9db4cc;padding:10px 8px;display:grid;gap:3px;align-content:start}.side b{color:#fff;font-size:12px;line-height:16px;padding:2px 8px 8px}.side em{font-style:normal;font-size:12px;line-height:16px;margin:0 8px 8px;padding:3px 6px;border-radius:6px;background:#17314d;color:#bfe0ff}.side span{padding:7px 8px;border-radius:8px;font-weight:600}.side span.a{background:var(--blue);color:#fff}
+.main{padding:12px;display:grid;gap:10px;align-content:start;background:var(--sky2)}
+.top{display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:12px;line-height:16px}
+.kan{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.kan>div{background:#fff;border:1.5px solid var(--line);border-radius:10px;padding:8px;min-height:130px}.kan small{font-size:12px;line-height:16px;font-weight:600;display:flex;justify-content:space-between;margin-bottom:6px;color:#1362a8}
+.c{display:block;background:var(--sky2);border:1px solid var(--line);border-radius:8px;padding:6px 8px;margin-bottom:6px;font-weight:600}.c i{display:block;font-style:normal;font-weight:500;color:var(--mute)}
+.mv{animation:mv 6s var(--ease) infinite}@keyframes mv{0%,25%{transform:none;background:var(--sky2)}55%,100%{transform:translateX(calc(100% + 16px));background:#c9f6d5;box-shadow:0 6px 14px rgba(23,216,76,.35)}}
+.sticker{position:absolute;z-index:3;background:#fff;border:2px solid var(--ink);border-radius:12px;padding:8px 12px;font-weight:600;font-size:12px;line-height:16px;box-shadow:3px 3px 0 var(--ink);animation:fl 4s ease-in-out infinite alternate}
+@keyframes fl{to{transform:translateY(-10px)}}.sticker i{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--g);margin-right:6px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-bottom:1px dashed var(--line);font-size:14px;line-height:20px}.row:last-child{border:0}
+.meter{height:10px;border-radius:5px;background:var(--sky);border:1.5px solid var(--ink);overflow:hidden}.meter i{display:block;height:100%;background:var(--grad);transform-origin:left;transform:scaleX(0);transition:transform 1.4s var(--ease)}.win.in .meter i{transform:scaleX(var(--w))}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}.stat{background:#fff;border:2px solid var(--ink);border-radius:16px;padding:20px;box-shadow:4px 4px 0 var(--ink)}.stat b{font-family:Manrope,system-ui,sans-serif;font-size:48px;line-height:48px;display:block;font-weight:600}
+.fn{display:grid;gap:12px;justify-items:center;margin-top:40px}
+.fb{display:grid;grid-template-columns:48px 1fr auto;gap:14px;align-items:center;width:var(--w);padding:14px 20px;border:2px solid var(--ink);border-radius:14px;background:#fff;color:var(--ink);text-decoration:none;box-shadow:4px 4px 0 var(--ink);transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
+.fb:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--blue)}
+.fb .no{font-family:Manrope,system-ui,sans-serif;font-size:30px;line-height:36px;font-weight:600;color:var(--blue)}
+.fb b{font-family:Manrope,system-ui,sans-serif;font-size:20px;line-height:28px;display:block}.fb small{font-size:12px;line-height:16px;color:var(--mute)}
+.fb .pill{white-space:nowrap}.fb.last{background:linear-gradient(90deg,#fff6c7,#d9f7e1)}
+.fnote{text-align:center;margin-top:18px;font-size:14px;color:var(--mute)}
+.proj{display:grid;grid-template-columns:1fr 1.15fr;gap:48px;align-items:center;padding:56px 0}.proj.rev .info{order:2}.proj+.proj{border-top:2px dashed var(--line)}
+.part{font:600 12px/16px Manrope,system-ui,sans-serif;color:#1362a8;border:1.5px dashed var(--blue);display:inline-block;padding:3px 8px;border-radius:6px;margin-bottom:10px}
+.proj h3{font-size:36px;line-height:40px;margin-bottom:6px}.pf{display:grid;gap:10px;margin:18px 0}.pf div{display:grid;grid-template-columns:78px 1fr;gap:12px}.pf b{font-size:12px;line-height:16px;padding-top:4px}.pf .bad{color:#b0243c}.pf .fix{color:#0c8a2c}
+.res{display:flex;gap:26px;flex-wrap:wrap;margin-bottom:18px}.res b{font-family:Manrope,system-ui,sans-serif;font-size:36px;line-height:40px;display:block}
+.wf{display:flex;flex-direction:column;align-items:center}.nd{background:#fff;border:1.5px solid var(--line);border-left:5px solid var(--blue);border-radius:10px;padding:7px 12px;width:min(280px,100%);font-size:12px;font-weight:600}.nd small{display:block;color:var(--mute);font-weight:500}.ln{width:2px;height:10px;background:var(--line)}
+.cal{display:grid;grid-template-columns:1fr 1fr;gap:8px}.cal>div{border:1.5px solid var(--line);border-radius:12px;padding:10px;background:var(--sky2)}
+.b2{border-radius:14px;padding:8px 12px;font-size:14px;line-height:20px;max-width:82%;background:var(--sky)}.b2.me{background:var(--blue);color:#fff;margin-left:auto}
+.sheet{display:grid;grid-template-columns:1.4fr 1fr 1fr;border:1.5px solid var(--line);font-size:12px}.sheet span{padding:5px 8px;border:.5px solid var(--line)}.sheet .h{background:#e6f7ea;font-weight:600}.sheet .hl{background:#fff6c7}
+.code{background:var(--ink);color:#bfe0ff;border-radius:10px;padding:10px 12px;font:500 12px/16px "Geist Mono",ui-monospace,Menlo,monospace;overflow-x:auto}
+/* sections: soft mesh + dot texture, framed like a card */
+.sky{margin:0 16px;border:2px solid var(--ink);border-radius:36px;box-shadow:6px 6px 0 var(--ink);position:relative;overflow:hidden;background:radial-gradient(520px 320px at 8% 0,rgba(242,197,3,.28),transparent 70%),radial-gradient(620px 380px at 96% 100%,rgba(23,216,76,.22),transparent 70%),radial-gradient(700px 420px at 55% 45%,rgba(40,151,252,.22),transparent 70%),radial-gradient(rgba(10,31,54,.09) 1.3px,transparent 1.6px) 0 0/22px 22px,linear-gradient(180deg,#EAF5FF,#CFE8FF)}
+/* video */
+.vid{background:var(--ink);color:#fff;border:2px solid var(--ink);border-radius:22px;overflow:hidden;max-width:920px;margin:36px auto 0;box-shadow:10px 10px 0 var(--blue);text-align:left}
+.vs{position:relative;height:430px;overflow:hidden;background:radial-gradient(circle at 20% 0,#1d4a7e,#0A1F36 65%)}
+.vs::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:6;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.45))}
+.hud{position:absolute;z-index:7;top:12px;left:18px;right:18px;display:flex;justify-content:space-between;font:600 12px/16px "Geist Mono",ui-monospace,Menlo,monospace;color:#cfe3f7;letter-spacing:.04em}.hud i{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ff4d5e;margin-right:6px;animation:blink 1s steps(2) infinite}@keyframes blink{50%{opacity:0}}
+.sc{position:absolute;inset:0;opacity:0;transform:scale(1.04);filter:blur(6px);transition:opacity .6s var(--ease),transform .8s var(--ease),filter .6s var(--ease);pointer-events:none}.sc.on{opacity:1;transform:none;filter:none}
+.ui{position:absolute;left:0;right:0;top:44px;bottom:100px;display:grid;place-content:center;justify-items:center;gap:16px}.on .ui{animation:kb 4.2s linear both}@keyframes kb{from{transform:scale(1)}to{transform:scale(1.06)}}
+.pn{position:relative;background:#fff;color:var(--ink);border-radius:14px;padding:14px;width:min(440px,92vw);box-shadow:0 22px 50px rgba(0,0,0,.45);text-align:left}.pn.dk{background:#0f2a47;color:#fff}.pn.dk .row{border-color:#26466b}
+.fld{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14px}.fld i{font-style:normal;color:var(--mute)}
+.ty{font-family:"Geist Mono",ui-monospace,Menlo,monospace;font-weight:600;display:inline-block;overflow:hidden;white-space:nowrap;width:0;border-right:2px solid var(--blue)}.on .ty{animation:type 1.2s steps(var(--n)) var(--d,.5s) forwards}@keyframes type{to{width:calc(var(--n)*1ch);border-color:transparent}}
+.toast{position:absolute;right:4%;top:2%;background:var(--ink);color:#fff;border:2px solid var(--g);border-radius:12px;padding:8px 12px;font-size:12px;line-height:16px;font-weight:600;opacity:0}.on .toast{animation:tin .5s var(--ease) 3s both}@keyframes tin{from{opacity:0;transform:translateX(40px)}to{opacity:1}}
+.lt{position:absolute;left:24px;bottom:24px;z-index:5;background:#fff;color:var(--ink);border:2px solid var(--ink);border-left:8px solid var(--blue);border-radius:10px;padding:8px 16px;box-shadow:4px 4px 0 var(--y);opacity:0}.on .lt{animation:lti .6s var(--ease) .2s both}@keyframes lti{from{opacity:0;transform:translateX(-30px)}to{opacity:1}}
+.cap{font-size:12px;font-weight:600;color:#1673cc;display:block}.lt h4{font-size:20px;line-height:28px;letter-spacing:-.02em}
+.vc{display:flex;flex-direction:column;gap:8px}.vb{background:#1c3350;border-radius:14px;padding:10px 14px;font-size:14px;line-height:20px;max-width:300px;opacity:0}.vb.me{background:var(--blue);margin-left:auto}
+.on .vb{animation:pop .5s var(--ease) both}.on .d1{animation-delay:1.4s}.on .d2{animation-delay:2.2s}.on .d3{animation-delay:3s}@keyframes pop{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.dots{display:flex;gap:4px;padding:10px 14px;background:#1c3350;border-radius:14px;width:58px;overflow:hidden}.dots i{width:7px;height:7px;border-radius:50%;background:#9db4cc;animation:bn .8s infinite}.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}@keyframes bn{50%{transform:translateY(-4px)}}
+.on .dots{animation:hid 1.6s both}@keyframes hid{0%,75%{opacity:1;max-height:34px}100%{opacity:0;max-height:0;padding:0;margin:-8px}}
+.sl{display:flex;gap:8px;position:relative;margin:14px 0}.sl i{padding:8px 14px;border-radius:10px;background:var(--sky);color:var(--ink);font-style:normal;font-size:14px;font-weight:600}.on .sl i.hit{animation:hit .6s var(--ease) 1.4s both}@keyframes hit{to{background:var(--g);color:#06260f;transform:scale(1.12)}}
+.ok2{background:#e6f7ea;color:#0c8a2c;font-weight:600;max-width:none}
+.cur{position:absolute;width:20px;height:24px;z-index:4;left:50%;top:55%;filter:drop-shadow(0 3px 3px rgba(0,0,0,.35))}.on .cur{animation:cm 1.3s var(--ease) .2s both}@keyframes cm{from{left:115%;top:260%}to{left:50%;top:55%}}
+.fl{display:flex;gap:6px;flex-wrap:wrap}.fl i{font-style:normal;background:#1c3350;border-radius:10px;padding:8px 10px;font-size:12px;font-weight:600;opacity:.4}.on .fl i{animation:lit .5s var(--ease) both}.on .fl i:nth-child(2){animation-delay:.5s}.on .fl i:nth-child(3){animation-delay:1s}.on .fl i:nth-child(4){animation-delay:1.5s}.on .fl i:nth-child(5){animation-delay:2s}.on .fl i:nth-child(6){animation-delay:2.5s}@keyframes lit{to{opacity:1;background:var(--blue)}}
+.pb{height:6px;border-radius:3px;background:#26466b;margin-top:14px;overflow:hidden}.pb i{display:block;height:100%;width:0;background:var(--grad)}.on .pb i{animation:pbf 3s linear .3s forwards}@keyframes pbf{to{width:100%}}
+.vk{display:grid;grid-template-columns:repeat(3,110px);gap:8px;text-align:left}.vk div{background:#1c3350;border-radius:12px;padding:8px;min-height:90px;font-size:12px;line-height:16px;font-weight:600;color:#9db4cc}.vk span{display:block;background:#fff;color:var(--ink);border-radius:8px;padding:6px;margin-top:6px;font-size:12px}.on .vk .mvc{animation:mvc 1.2s var(--ease) 1s both}@keyframes mvc{to{transform:translateX(118px);background:var(--g)}}
+.vr{display:flex;gap:28px}.vr b{font-family:Manrope,system-ui,sans-serif;font-size:30px;line-height:36px;display:block}
+.ctl{display:flex;gap:14px;align-items:center;padding:12px 20px;background:#0f2a47}.pp{width:40px;height:40px;border-radius:50%;border:0;background:var(--blue);color:#fff;cursor:pointer;font-size:14px;line-height:20px}
+.pg{flex:1;height:10px;background:#26466b;border-radius:5px;cursor:pointer}.pg i{display:block;height:100%;border-radius:5px;background:var(--grad);width:0}
+.chs{display:flex;gap:8px;flex-wrap:wrap;padding:10px 20px 18px;background:#0f2a47}.chs button{background:#1c3350;color:#bcd0e6;border:0;border-radius:99px;padding:6px 12px;font:600 12px Manrope,sans-serif;cursor:pointer}.chs button[aria-current=true]{background:#fff;color:var(--ink)}
+.grid{display:grid;gap:24px;grid-template-columns:repeat(3,1fr);margin-top:40px}.g2{grid-template-columns:repeat(2,1fr)}
+.card{background:#fff;border:2px solid var(--ink);border-radius:18px;padding:26px;box-shadow:5px 5px 0 var(--ink)}.card.hot{box-shadow:5px 5px 0 var(--blue)}
+.card .big{font-family:Manrope,system-ui,sans-serif;font-size:36px;line-height:40px;font-weight:600;display:block;margin-bottom:8px}
+.bk{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:start;margin-top:40px;text-align:left}
+.gcal iframe{display:block}
+.days{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 18px}.slots{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+.opt{font:600 14px/20px Manrope,sans-serif;padding:8px 12px;border-radius:10px;border:2px solid var(--ink);background:#fff;color:var(--ink);cursor:pointer;transition:transform .3s var(--ease),background .3s}
+.opt:hover{transform:translateY(-2px)}.opt[aria-pressed=true]{background:var(--blue);color:#fff}
+.pick{margin-top:14px;font-size:14px;font-weight:600;min-height:20px}
+input:not([type]),input[type=email],select,textarea{width:100%;font:inherit;padding:10px 12px;border:2px solid var(--ink);border-radius:12px;background:#fff;color:var(--ink)}label.l{display:block;font-size:14px;font-weight:600;margin:12px 0 4px}
+.err{color:#b0243c;font-size:12px;min-height:16px;margin-top:4px}
+details{border:2px solid var(--ink);border-radius:14px;padding:14px 18px;background:#fff;margin-bottom:12px}summary{cursor:pointer;font-weight:600}details p{color:var(--mute);margin-top:8px}
+.sticky{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:40;opacity:0;transform:translateY(32px);pointer-events:none;transition:.5s var(--ease)}.sticky.on{opacity:1;transform:none;pointer-events:auto}
+footer{padding:48px 0;background:var(--sky);border-top:2px solid var(--ink);text-align:center;color:var(--mute);font-size:14px;line-height:20px}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease),transform .7s var(--ease)}.rv.in{opacity:1;transform:none}
+@media(max-width:860px){.h1{font-size:36px;line-height:40px}.h2{font-size:30px;line-height:36px}.hg,.proj,.grid,.g2,.bk{grid-template-columns:1fr}.proj.rev .info{order:0}.stats{grid-template-columns:repeat(2,1fr)}nav a:not(.btn){display:none}section{padding:60px 0}.sticker{display:none}.app{grid-template-columns:1fr}.side{display:none}.vs{height:470px}.vk{grid-template-columns:repeat(3,92px)}.stat b{font-size:36px;line-height:40px}.fb{width:100%;grid-template-columns:36px 1fr}.fb .pill{display:none}.sky{margin:0 8px;border-radius:24px}.lt{left:12px;right:12px}.lt h4{font-size:16px;line-height:24px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:opacity .3s!important}.rv,.sc{transform:none;filter:none}.vb,.vcard,.toast,.lt{opacity:1}.fl i{opacity:1}.ty{width:auto;border:0}.meter i{transform:scaleX(var(--w))}}
+b,strong,summary{font-weight:600}i,em,cite{font-style:normal}p,li,.sm,.sub,details p,.fb small,.pf span,.nd small{text-wrap:pretty}nav a:not(.btn){line-height:20px}
+</style></head><body>
+<a class="skip" href="#main">Skip to content</a>
+<nav aria-label="Primary"><b>Ahmed Masood</b><a href="#funnel">Funnel map</a><a href="#work">Work</a><a href="#video">Demo</a><a href="#how">Process</a><a class="btn cta s" href="#book">Book a call</a></nav>
+<main id="main">
+
+<section class="hero"><div class="wrap hg">
+<div><span class="tagl xs">GoHighLevel funnel portfolio</span>
+<h1 class="h1">I build funnels that turn strangers into <span class="gt">booked calls.</span></h1>
+<p class="sub">I’m Ahmed Masood. 50+ GoHighLevel builds: webinar funnels, booking engines, AI agents and SMS setups that carriers approve. This page is the portfolio, laid out the way a funnel works.</p>
+<div class="ctas"><a class="btn cta" href="#book">Want me to set up GHL for you? Book a call</a><a class="btn" href="#funnel">Walk the funnel</a></div>
+<p class="fine">Free first call. You keep everything I build.</p></div>
+<div style="position:relative"><div class="win"><div class="bar"><i></i><i></i><i></i><span>app.gohighlevel.com/v2/opportunities</span></div>
+<div class="app"><div class="side"><b>GoHighLevel</b><em>Sub account: Your Biz</em><span>Launchpad</span><span>Conversations</span><span>Calendars</span><span class="a">Opportunities</span><span>Automation</span><span>Sites</span><span>Reporting</span></div>
+<div class="main"><div class="top"><span>Pipeline: Sales</span><span class="pill">12 open · $48,200</span></div>
+<div class="kan"><div><small>New lead <b>3</b></small><span class="c">Maria V.<i>Meta Ads · 2 min ago</i></span><span class="c mv">Elena R.<i>Form · 5 min ago</i></span></div><div><small>Booked <b>2</b></small><span class="c">Jon C.<i>Thu 10:00 AM</i></span></div><div><small>Won <b>1</b></small><span class="c">Luca B.<i>$6,500</i></span></div></div>
+<div class="row"><span class="xs">Follow ups forgotten</span><span class="pill ok">0</span></div></div></div></div>
+<div class="sticker" style="left:-20px;top:70px"><i></i>New lead from Meta Ads</div><div class="sticker" style="right:-8px;bottom:40px;animation-delay:-2s"><i></i>AI booked a call</div></div>
+</div></section>
+
+<section style="padding-top:24px"><div class="wrap"><div class="stats rv"><div class="stat"><b class="gt">50+</b><span class="sm mute">GoHighLevel projects shipped and running</span></div><div class="stat"><b class="gt">5.5x</b><span class="sm mute">webinar turnout: 40 attendees became 220+</span></div><div class="stat"><b class="gt">8.5s</b><span class="sm mute">booking page load, now instant</span></div><div class="stat"><b class="gt">100%</b><span class="sm mute">A2P approval for a credit repair brand</span></div></div></div></section>
+
+<section class="sky" id="funnel"><div class="wrap"><div class="rv" style="max-width:720px"><span class="tagl xs">The portfolio as a funnel</span><h2 class="h2">Every build sits at a stage. Pick the stage you’re stuck on.</h2></div>
+<div class="fn rv">
+<a class="fb" style="--w:100%" href="#p1"><span class="no">01</span><span><b>Attract</b><small>Get the right people to register, click or call</small></span><span class="pill">TCB Drones</span></a>
+<a class="fb" style="--w:88%" href="#p3"><span class="no">02</span><span><b>Capture</b><small>Landing pages and forms that turn clicks into contacts</small></span><span class="pill">Homes With Kyle</span></a>
+<a class="fb" style="--w:76%" href="#p4"><span class="no">03</span><span><b>Reach</b><small>Texts and emails that actually arrive</small></span><span class="pill">Shark Capital</span></a>
+<a class="fb" style="--w:64%" href="#p2"><span class="no">04</span><span><b>Book</b><small>A calendar people can use without waiting</small></span><span class="pill">Therapy at Night</span></a>
+<a class="fb last" style="--w:52%" href="#p5"><span class="no">05</span><span><b>Close</b><small>Pipeline and data that stay in sync</small></span><span class="pill">Heartbeat</span></a>
+</div>
+<p class="fnote">Tap a stage to jump to the build.</p></div></section>
+
+<section id="work"><div class="wrap"><div class="rv" style="max-width:760px"><span class="tagl xs">Selected work</span><h2 class="h2">5 of 50+ builds. The rest are under NDA.</h2><p class="mute" style="margin-top:14px">Webinars, booking, real estate, compliance, integrations. Each one is a before and after.</p></div>
+
+<article class="proj rv" id="p1"><div class="info"><span class="part">STAGE 01 · ATTRACT</span><h3>TCB Drones</h3><div class="pf"><div><b class="bad">BEFORE</b><span class="mute">120 people registered. 40 showed up.</span></div><div><b class="fix">BUILT</b><span class="mute">A Zoom server to server link that adds every GHL registrant automatically, a funnel, AI voice agents and conversational AI to chase attendance.</span></div></div><div class="res"><div><b class="gt">300</b><span class="xs mute">REGISTRANTS</span></div><div><b class="gt">220+</b><span class="xs mute">SHOWED UP</span></div></div><a class="btn s" href="https://www.tcbdrones.com/" target="_blank" rel="noopener">Visit tcbdrones.com</a></div>
+<div class="win"><div class="bar"><i></i><i></i><i></i><span>Automation · Webinar registration</span></div><div class="body"><div class="wf"><div class="nd">Trigger: Form submitted<small>Webinar funnel</small></div><div class="ln"></div><div class="nd">Webhook: add Zoom registrant<small>Server to server OAuth</small></div><div class="ln"></div><div class="nd">Email + SMS reminders<small>24h · 1h · 10 min</small></div><div class="ln"></div><div class="nd" style="border-left-color:var(--g)">AI voice call<small>“Hi, your seat is saved. Coming?”</small></div></div><div class="row"><span>Registered</span><b>300</b></div><div class="meter"><i style="--w:1"></i></div><div class="row"><span>Joined on Zoom</span><b>220+</b></div><div class="meter"><i style="--w:.73"></i></div></div></div></article>
+
+<article class="proj rev rv" id="p3"><div class="info"><span class="part">STAGE 02 · CAPTURE</span><h3>Homes With Kyle</h3><div class="pf"><div><b class="bad">BEFORE</b><span class="mute">Meta ads delivered leads, but they went cold before anyone closed them.</span></div><div><b class="fix">BUILT</b><span class="mute">3 landing pages, 3 automations for his unique offers, and an agent that reads contact fields and books the appointment with Kyle.</span></div></div><div class="res"><div><b class="gt">3 + 3</b><span class="xs mute">PAGES + AUTOMATIONS</span></div><div><b class="gt">More</b><span class="xs mute">LEADS AND DEALS CLOSED</span></div></div></div>
+<div class="win"><div class="bar"><i></i><i></i><i></i><span>Conversations · Sam T.</span></div><div class="body"><div class="b2">Hi Sam, saw you asked about 3 bed homes. Want a quick call with Kyle?</div><div class="b2 me">Yes, Thursday works.</div><div class="b2">Booked: Thursday 4 PM with Kyle.</div><div class="row"><span>Appointment with Kyle</span><span class="pill ok">Booked</span></div><div class="row"><span>Source</span><span class="pill">Meta Ads</span></div></div></div></article>
+
+<article class="proj rv" id="p4"><div class="info"><span class="part">STAGE 03 · REACH</span><h3>Shark Capital</h3><div class="pf"><div><b class="bad">BEFORE</b><span class="mute">Credit repair and funding brands get rejected by carriers on A2P 10DLC.</span></div><div><b class="fix">BUILT</b><span class="mute">TCPA opt in boxes, transactional workflows, footer terms and a clean Trust Center submission.</span></div></div><div class="res"><div><b class="gt">100%</b><span class="xs mute">BRAND + CAMPAIGN APPROVED</span></div></div></div>
+<div class="win"><div class="bar"><i></i><i></i><i></i><span>Settings · Trust Center</span></div><div class="body"><div class="row"><span>Brand registration</span><span class="pill ok">Approved</span></div><div class="row"><span>Campaign registration</span><span class="pill ok">Approved</span></div><div class="row"><span>SMS consent box (unchecked)</span><span class="pill ok">Added</span></div><div class="row"><span>Privacy + SMS terms in footer</span><span class="pill ok">Live</span></div><div class="row"><span>Carrier filtering</span><span class="pill">None</span></div></div></div></article>
+
+<article class="proj rev rv" id="p2"><div class="info"><span class="part">STAGE 04 · BOOK</span><h3>Therapy at Night</h3><div class="pf"><div><b class="bad">BEFORE</b><span class="mute">13 therapists, night hours, 3 price tiers. 77 calendar widgets on one page overloaded native GHL.</span></div><div><b class="fix">BUILT</b><span class="mute">Dropdown lookup routing, widgets loaded on click, one cached script and event delegation.</span></div></div><div class="res"><div><b class="gt">8.5s → instant</b><span class="xs mute">LOAD TIME, 85%+ FASTER</span></div></div></div>
+<div class="win"><div class="bar"><i></i><i></i><i></i><span>therapyatnight.com/book</span></div><div class="body"><label class="l" style="margin:0">Who would you like to see?</label><select aria-label="Therapist"><option>Dr. Ayesha Khan · $175 / session</option></select><div class="cal"><div><b class="sm">Dr. Ayesha Khan</b><div class="xs mute">Tonight · 9:00 PM</div><span class="pill">$175</span></div><div><b class="sm">Dr. Daniel Reyes</b><div class="xs mute">Tonight · 10:00 PM</div><span class="pill">$185</span></div><div><b class="sm">Dr. Priya Nair</b><div class="xs mute">Tonight · 11:00 PM</div><span class="pill">$195</span></div><div style="background:#fff;border-style:dashed"><b class="sm">Calendar loads here</b><div class="xs mute">One widget. Not 77.</div></div></div></div></div></article>
+
+<article class="proj rv" id="p5"><div class="info"><span class="part">STAGE 05 · CLOSE</span><h3>Heartbeat by Transforma</h3><div class="pf"><div><b class="bad">BEFORE</b><span class="mute">Front desk worked in Google Sheets, sales worked in GHL. Everything was typed twice.</span></div><div><b class="fix">BUILT</b><span class="mute">An Apps Script onEdit trigger posts to a GHL webhook, and if / else logic moves the pipeline stage.</span></div></div><div class="res"><div><b class="gt">0 sec</b><span class="xs mute">SYNC LAG</span></div><div><b class="gt">100%</b><span class="xs mute">DATA INTEGRITY</span></div></div></div>
+<div class="win"><div class="bar"><i></i><i></i><i></i><span>Sheets → GoHighLevel</span></div><div class="body"><div class="sheet"><span class="h">Client</span><span class="h">Status</span><span class="h">Time</span><span>Maria Vella</span><span class="hl">Booked</span><span>09:41</span><span>Jon Camilleri</span><span>New</span><span>09:12</span></div><div class="code">POST /hooks/catch/…<br>{"name":"Maria Vella","status":"Booked"}</div><div class="row"><span>Pipeline stage</span><span class="pill ok">New → Booked</span></div></div></div></article>
+</div></section>
+
+<section class="sky" id="video"><div class="wrap" style="text-align:center"><span class="tagl xs">The funnel in motion</span><h2 class="h2" style="max-width:760px;margin:0 auto">One lead. One AI. One booked call. 20 seconds.</h2>
+<div class="vid"><div class="vs" id="vs">
+<div class="hud"><span><i></i>REC · SCREEN CAPTURE</span><span id="hs">SCENE 1/5</span></div>
+<div class="sc"><div class="ui"><div class="pn"><div class="row"><b>Meta Lead Ad</b><span class="pill">Live</span></div><div class="fld"><i>Name</i><span class="ty" style="--n:8">Maria V.</span></div><div class="fld"><i>Looking for</i><span class="ty" style="--n:20;--d:1.5s">3 bed home, Valletta</span></div><div class="row"><span class="sm mute">Form submitted</span><span class="pill ok">✓ Sent</span></div></div><div class="toast">● New lead in GoHighLevel</div></div><div class="lt"><span class="cap">1 · THE LEAD</span><h4>A Meta ad lead lands in your pipeline</h4></div></div>
+<div class="sc"><div class="ui"><div class="pn dk"><div class="row"><b>Conversation AI · Maria</b><span class="pill ok">Replying</span></div><div class="vc" style="margin-top:8px"><div class="dots"><i></i><i></i><i></i></div><div class="vb d1">Hi Maria, want to see times with Kyle this week?</div><div class="vb me d2">Yes please</div><div class="vb d3">Thursday 10 AM is open.</div></div></div></div><div class="lt"><span class="cap">2 · THE AI</span><h4>It replies in seconds, any hour</h4></div></div>
+<div class="sc"><div class="ui"><div class="pn"><div class="row"><b>Thursday</b><span class="pill">Kyle’s calendar</span></div><div class="sl"><svg class="cur" viewBox="0 0 20 24"><path d="M1 1v19l5-4 3 7 4-2-3-7h7z" fill="#0A1F36" stroke="#fff" stroke-width="1.5"/></svg><i>9 AM</i><i class="hit">10 AM</i><i>11 AM</i></div><div class="vb d2 ok2">✓ Booked · confirmation SMS sent</div></div></div><div class="lt"><span class="cap">3 · THE BOOKING</span><h4>The calendar books it. No back and forth.</h4></div></div>
+<div class="sc"><div class="ui"><div class="pn dk"><div class="row"><b>Workflow · Follow up</b><span class="pill">Running</span></div><div class="fl"><i>Trigger</i><i>Wait 5 min</i><i>AI call</i><i>If / Else</i><i>SMS</i><i>Move stage</i></div><div class="pb"><i></i></div></div></div><div class="lt"><span class="cap">4 · THE WORKFLOW</span><h4>Follow ups run on their own</h4></div></div>
+<div class="sc"><div class="ui"><div class="vk"><div>NEW LEAD<span class="mvc">Maria V.</span></div><div>BOOKED</div><div>WON</div></div><div class="vr"><div><b class="gt">300</b><span class="xs">REGISTERED</span></div><div><b class="gt">220+</b><span class="xs">SHOWED UP</span></div></div></div><div class="lt"><span class="cap">5 · THE RESULT</span><h4>The pipeline updates itself. You show up.</h4></div></div>
+</div>
+<div class="ctl"><button class="pp" id="pp" aria-label="Pause">❚❚</button><span class="xs" id="vt">0:00</span><div class="pg" id="pg" role="slider" aria-label="Seek" aria-valuemin="0" aria-valuemax="20" aria-valuenow="0" tabindex="0"><i id="vp"></i></div><span class="xs">0:20</span></div>
+<div class="chs" id="chs"><button>1 Lead</button><button>2 AI reply</button><button>3 Booking</button><button>4 Workflow</button><button>5 Pipeline</button></div></div>
+</div></section>
+
+<section id="how"><div class="wrap"><div class="rv" style="max-width:720px"><span class="tagl xs">Working with me</span><h2 class="h2">Three steps from “it’s a mess” to “it runs itself.”</h2></div>
+<div class="grid"><div class="card rv"><span class="big gt">01</span><h3 class="h6">A free call</h3><p class="mute sm" style="margin-top:8px">We look at your funnel, workflows, calendars and SMS setup, and I tell you what is leaking.</p></div>
+<div class="card hot rv"><span class="big gt">02</span><h3 class="h6">I build it in your GHL</h3><p class="mute sm" style="margin-top:8px">Pages, forms, calendars, workflows and AI agents, set up inside your own account and tested with dummy leads.</p></div>
+<div class="card rv"><span class="big gt">03</span><h3 class="h6">You own it</h3><p class="mute sm" style="margin-top:8px">You get written docs and a walkthrough. Nothing is held hostage and nothing needs me to keep running.</p></div></div></div></section>
+
+<section class="sky" id="book"><div class="wrap" style="text-align:center"><span class="tagl xs">Your turn</span><h2 class="h2" style="max-width:760px;margin:0 auto">Want me to set up GHL for you?</h2><p class="mute" style="margin:12px auto 0;max-width:560px">Pick a time that suits you and tell me what you need. We’ll go through it on a call, no pressure.</p>
+<div class="bk"><div class="card gcal"><h3 class="h6">My calendar</h3><p class="sm mute" style="margin:6px 0 12px">My availability. Pick a time on the right to request a call.</p><iframe src="https://calendar.google.com/calendar/embed?src=am03083234711%40gmail.com&ctz=Asia%2FKarachi" title="Ahmed’s Google Calendar" style="border:0;width:100%;height:560px;border-radius:12px" loading="lazy"></iframe><a class="btn s" style="margin-top:12px" href="https://calendar.google.com/calendar/embed?src=am03083234711%40gmail.com&ctz=Asia%2FKarachi" target="_blank" rel="noopener">Open calendar in a new tab</a></div>
+<div style="display:grid;gap:24px"><div class="card" id="calbox"><h3 class="h6">1. Pick a day</h3><div class="days" id="days"></div><h3 class="h6">2. Pick a time</h3><div class="slots" id="slots"></div><p class="xs mute" style="margin-top:10px" id="tz"></p></div>
+<form id="f" novalidate class="card hot"><h3 class="h6">3. Tell me about it</h3><div class="pick" id="pick">No time picked yet.</div><label class="l" for="n">Name</label><input id="n" autocomplete="name"><div class="err" data-e="n"></div><label class="l" for="e">Email</label><input id="e" type="email" autocomplete="email"><div class="err" data-e="e"></div><label class="l" for="m">What do you need help with?</label><select id="m"><option value="">Choose one</option><option>Set up GHL from scratch</option><option>Webinar funnel</option><option>Booking system</option><option>A2P / SMS approval</option><option>Automations and integrations</option><option>Not sure yet</option></select><div class="err" data-e="m"></div><button class="btn cta" style="width:100%;margin-top:12px">Book my call</button><div id="ok" role="status" style="color:#0c8a2c;font-weight:600;margin-top:12px"></div></form></div></div></div></section>
+
+<section id="faq"><div class="wrap" style="max-width:720px"><h2 class="h3 rv" style="margin-bottom:24px">Questions you were about to ask</h2>
+<details><summary>What happens on the call?</summary><p>I look at what you have in GoHighLevel, ask what you want it to do, and give you a short list of fixes in order of impact.</p></details>
+<details><summary>Do I need to leave GoHighLevel?</summary><p>No. The Therapy at Night system runs natively in GHL with no extra hosting.</p></details>
+<details><summary>Can you fix A2P rejections?</summary><p>Yes. Shark Capital, a credit repair and funding brand, got approved after forms, workflows and footer terms were rebuilt.</p></details>
+<details><summary>Who owns the build?</summary><p>You do. It lives in your account and comes with written docs.</p></details>
+<details><summary>Can you start from zero?</summary><p>Yes. Many of my builds start with an empty sub account.</p></details></div></section>
+</main>
+<a class="btn cta sticky" id="st" href="#book">Book a call</a>
+<footer><div class="wrap">Ahmed Masood · GoHighLevel expert · Karachi<br>Privacy policy: <a href="#">add link</a> · Terms: <a href="#">add link</a></div></footer>
+<script>
+/* CONFIG: paste a GHL webhook URL to receive the form. Without it, the form opens an email to you. */
+const CFG={calendarEmbed:'',webhook:''};
+const rm=matchMedia('(prefers-reduced-motion: reduce)').matches,$=s=>[...document.querySelectorAll(s)],G=id=>document.getElementById(id);
+const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.12});$('.rv,.win').forEach(e=>io.observe(e));
+new IntersectionObserver(([x])=>G('st').classList.toggle('on',!x.isIntersecting)).observe(document.querySelector('.hero'));
+const sc=$('.sc'),chs=$('#chs button'),vp=G('vp'),vt=G('vt'),pg=G('pg'),pp=G('pp'),D=20,S=4;let t=0,play=!rm,cur=-1,last=performance.now(),vis=true;
+new IntersectionObserver(([x])=>vis=x.isIntersecting).observe(G('vs'));
+function show(i){if(i===cur)return;cur=i;G('hs').textContent='SCENE '+(i+1)+'/5';sc.forEach((s,k)=>{s.classList.remove('on');if(k===i){void s.offsetWidth;s.classList.add('on')}});chs.forEach((c,k)=>c.setAttribute('aria-current',k===i))}
+function draw(){show(Math.min(4,Math.floor(t/S)));vp.style.width=t/D*100+'%';vt.textContent='0:'+String(Math.floor(t)).padStart(2,'0');pg.setAttribute('aria-valuenow',Math.floor(t))}
+function setP(v){play=v;pp.textContent=v?'❚❚':'▶';pp.setAttribute('aria-label',v?'Pause':'Play')}
+function seek(s){t=Math.max(0,Math.min(D-.01,s));cur=-1;draw()}
+(function f(n){const d=(n-last)/1000;last=n;if(play&&vis){t+=d;if(t>=D)t=0}draw();requestAnimationFrame(f)})(last);setP(play);
+pp.onclick=()=>setP(!play);pg.onclick=e=>{const r=pg.getBoundingClientRect();seek((e.clientX-r.left)/r.width*D)};
+pg.onkeydown=e=>{if(e.key==='ArrowRight')seek(t+2);if(e.key==='ArrowLeft')seek(t-2)};chs.forEach((c,k)=>c.onclick=()=>{seek(k*S);setP(true)});
+let selDay=null,selSlot=null;
+if(CFG.calendarEmbed){
+  G('calbox').innerHTML='<iframe src="'+CFG.calendarEmbed+'" title="Book a call" style="width:100%;height:640px;border:0;border-radius:12px" loading="lazy"></iframe>';
+  G('f').style.display='none';
+}else{
+  const days=[];for(let i=1;days.length<7;i++){const d=new Date();d.setDate(d.getDate()+i);if(d.getDay()!==0&&d.getDay()!==6)days.push(d)}
+  const HOURS=[11,13,15,17]; /* call hours in Karachi time (UTC+5) */
+  G('tz').textContent='Times shown in your local time ('+Intl.DateTimeFormat().resolvedOptions().timeZone+').';
+  const dEl=G('days'),sEl=G('slots');
+  days.forEach((d,k)=>{const b=document.createElement('button');b.type='button';b.className='opt';b.setAttribute('aria-pressed','false');b.textContent=d.toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short'});b.onclick=()=>{selDay=d;selSlot=null;$('#days .opt').forEach(x=>x.setAttribute('aria-pressed',x===b));renderSlots();upd()};dEl.appendChild(b)});
+  function renderSlots(){sEl.innerHTML='';HOURS.forEach(h=>{const s=new Date(Date.UTC(selDay.getFullYear(),selDay.getMonth(),selDay.getDate(),h-5));const b=document.createElement('button');b.type='button';b.className='opt';b.setAttribute('aria-pressed','false');b.textContent=s.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});b.onclick=()=>{selSlot=s;$('#slots .opt').forEach(x=>x.setAttribute('aria-pressed',x===b));upd()};sEl.appendChild(b)})}
+  function upd(){G('pick').textContent=selSlot?'Your slot: '+selSlot.toLocaleString(undefined,{weekday:'long',day:'numeric',month:'long',hour:'numeric',minute:'2-digit'}):(selDay?'Now pick a time.':'No time picked yet.')}
+  G('f').onsubmit=ev=>{ev.preventDefault();const g=k=>G(k).value.trim(),r={n:g('n')?'':'Enter your name.',e:/^\S+@\S+\.\S+$/.test(g('e'))?'':'Enter a valid email address.',m:g('m')?'':'Choose what you need.'};$('[data-e]').forEach(x=>x.textContent=r[x.dataset.e]);
+    if(!Object.values(r).every(v=>!v))return;
+    if(!selSlot){G('ok').style.color='#b0243c';G('ok').textContent='Pick a day and time first.';return}
+    G('ok').style.color='#0c8a2c';
+    const payload={name:g('n'),email:g('e'),need:g('m'),slot:selSlot.toISOString()};
+    if(CFG.webhook){fetch(CFG.webhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).then(()=>G('ok').textContent='Request received. I will confirm by email shortly.').catch(()=>{G('ok').style.color='#b0243c';G('ok').textContent='Something went wrong. Please try again.'})}
+    else{G('ok').textContent='Opening your email app to send the request…';location.href='mailto:am03083234711@gmail.com?subject='+encodeURIComponent('Call request: '+payload.need)+'&body='+encodeURIComponent('Name: '+payload.name+'\nEmail: '+payload.email+'\nSlot: '+selSlot.toString())}
+  };
+}
+</script></body></html>
