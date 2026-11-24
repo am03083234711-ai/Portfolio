@@ -318,7 +318,7 @@ h1,h2,h3,h4{font-weight:700;letter-spacing:-.035em;text-wrap:balance;line-height
 .nav.sc{border-color:var(--line)}
 .navi{display:flex;align-items:center;gap:28px;height:70px}
 .logo{display:flex;align-items:center;gap:10px;text-decoration:none;font:800 19px Manrope,system-ui,sans-serif;letter-spacing:-.03em}
-.logo .blob{width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 32% 30%,#fff7 0 18%,transparent 19%),radial-gradient(circle at 35% 35%,#FFD86B,#F2A900 70%);box-shadow:inset -4px -5px 0 rgba(0,0,0,.12),0 4px 10px -4px rgba(242,169,0,.8);position:relative}
+.logo .blob{flex:none;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 32% 30%,#fff7 0 18%,transparent 19%),radial-gradient(circle at 35% 35%,#FFD86B,#F2A900 70%);box-shadow:inset -4px -5px 0 rgba(0,0,0,.12),0 4px 10px -4px rgba(242,169,0,.8);position:relative}
 .logo .blob::after{content:"";position:absolute;right:-6px;bottom:-2px;width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#7FB3FF,#3B82F6 70%);box-shadow:inset -2px -3px 0 rgba(0,0,0,.15)}
 .links{display:flex;gap:4px;align-items:center}
 .ndd{position:relative}
@@ -612,9 +612,53 @@ dialog.dm[open]{animation:pin .45s var(--ease)}
 .art .ball{box-shadow:inset -8px -10px 18px rgba(0,0,0,.22),inset 6px 6px 12px rgba(255,255,255,.35),0 18px 26px -12px rgba(20,20,20,.35);animation:bob 6s ease-in-out infinite}
 .cov i{box-shadow:inset -3px -4px 6px rgba(0,0,0,.2),0 6px 10px -4px rgba(20,20,20,.4)}
 
+/* ===== responsive polish ===== */
+.fgrid a.logo{display:flex;padding:0}
+.burger{display:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:#fff;cursor:pointer;position:relative;flex:none}
+.burger span{position:absolute;left:13px;right:13px;height:2px;border-radius:2px;background:var(--ink);transition:transform .3s var(--ease),top .3s var(--ease)}
+.burger span:first-child{top:17px}.burger span:last-child{top:25px}
+.nav.mopen .burger span:first-child{top:21px;transform:rotate(45deg)}.nav.mopen .burger span:last-child{top:21px;transform:rotate(-45deg)}
+.mnav{position:absolute;left:0;right:0;top:100%;background:var(--bg);border-bottom:1px solid var(--line);box-shadow:0 30px 40px -30px rgba(20,20,20,.35);padding:8px 0 20px;max-height:calc(100dvh - 70px);overflow:auto;animation:pin .35s var(--ease)}
+.mnav[hidden]{display:none}
+.mnav a:not(.btn){display:block;padding:14px 4px;border-bottom:1px solid var(--line);font:700 18px Manrope,system-ui,sans-serif;letter-spacing:-.02em;text-decoration:none}
+.mcta{display:grid;gap:10px;margin-top:18px}.mcta .btn{width:100%}
+body.noscroll{overflow:hidden}
+@media(max-width:1080px){.burger{display:block}}
+@media(max-width:900px){
+ .pgrid{grid-template-columns:1fr 1fr}.pgrid .pc:last-child{grid-column:1/-1}
+ .calwrap{order:-1}
+ .c3d .o3{scale:.6}.c3d .o3:nth-child(1){left:-6%!important;top:2%!important}.c3d .o3:nth-child(2){left:-3%!important;top:88%!important}.c3d .o3:nth-child(3){left:80%!important;top:1%!important}.c3d .o3:nth-child(4){left:86%!important;top:90%!important}.c3d .o3:nth-child(5),.c3d .o3:nth-child(6){display:none}.c3d .o3:nth-child(7){left:92%!important;top:48%!important}
+ .art{aspect-ratio:4/3}
+}
+@media(max-width:600px){
+ .pgrid{grid-template-columns:1fr}.pgrid .pc:last-child{grid-column:auto}
+ .annc .lg{display:none}
+ .nav .nr .btn.s:not(.sec){padding:9px 12px;font-size:12.5px}
+ .navi{gap:10px;height:64px}.nr{gap:8px}.burger{width:40px;height:40px}.burger span{left:12px;right:12px}.burger span:first-child{top:15px}.burger span:last-child{top:23px}.nav.mopen .burger span{top:19px!important}
+ .hero{padding-top:36px}.hero .lede{font-size:17px}
+ .hcta .btn{width:100%;max-width:340px}
+ .copyc{max-width:100%}
+ .pbox{padding:8px 8px 8px 16px;border-radius:20px}.pbox textarea{font-size:16px;height:78px;padding-top:6px}.pbox button{width:46px;height:46px}
+ .pex button{font-size:14.5px;padding:10px 8px}
+ .vbig{min-height:360px;padding:22px}.vbig .play{top:34%;width:72px;height:72px}.vbig .play svg{width:24px;height:24px}.vbig b{font-size:22px}
+ .case b{font-size:26px}
+ .calwrap .calendly-inline-widget{height:1000px!important}
+ .bcard{padding:20px}
+ .fgrid{gap:26px 18px}.fgrid>div:first-child{grid-column:1/-1}
+ .fbot{flex-direction:column;gap:6px}
+ .feat h3{font-size:28px}
+ .dmh{padding:16px}.dmb{padding:14px 14px 20px}
+}
+@media(max-width:420px){
+ .stats{grid-template-columns:1fr}.st{padding:18px 20px}.st b{font-size:30px;margin-bottom:6px}
+ .logo{font-size:15px}.nav .nr .btn.s:not(.sec){font-size:12px;padding:8px 11px}
+}
+
+.smt{display:none}@media(max-width:420px){.lgt{display:none}.smt{display:inline}}
+
 .mscroll.swp::after{content:"Swipe to see the full screen →";position:sticky;left:0;display:block;font:600 12px Manrope,system-ui,sans-serif;color:var(--mute);padding:8px 12px;background:var(--bg2);white-space:nowrap}
 </style></head><body>
-<div class="annc">New build: Voice AI seat confirmations took TCB Drones from 40 to 220+ live webinar attendees.<a href="#attract">See how it works →</a></div>
+<div class="annc"><span class="lg">New build: </span>Voice AI took TCB Drones from 40 to 220+ live webinar attendees.<a href="#attract">See how it works →</a></div>
 <header class="nav" id="nav"><div class="wrap navi">
   <a class="logo" href="#top" aria-label="Ahmed Masood, back to top"><span class="blob"></span>Ahmed Masood</a>
   <nav class="links" aria-label="Primary">
@@ -622,15 +666,19 @@ dialog.dm[open]{animation:pin .45s var(--ease)}
     <div class="ndd"><button type="button" aria-expanded="false">Automations<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg></button><div class="menu" id="m-autos"></div></div>
     <a href="#process">Process</a><a href="#faq">FAQ</a>
   </nav>
-  <div class="nr"><button type="button" class="btn sec s" data-video><span class="pl"><svg viewBox="0 0 24 24"><path d="M7 5v14l12-7z"/></svg></span>Watch my video</button><a class="btn s" href="#book">Book a free GHL audit</a></div>
-</div></header>
+  <div class="nr"><button type="button" class="btn sec s" data-video><span class="pl"><svg viewBox="0 0 24 24"><path d="M7 5v14l12-7z"/></svg></span>Watch my video</button><a class="btn s" href="#book"><span class="lgt">Book a free GHL audit</span><span class="smt">Book audit</span></a><button type="button" class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="mnav"><span></span><span></span></button></div>
+</div>
+<div class="mnav" id="mnav" hidden><div class="wrap">
+  <a href="#builds">Client builds</a><a href="#automations">Automations</a><a href="#ask">What do you want to automate?</a><a href="#process">Process</a><a href="#faq">FAQ</a>
+  <div class="mcta"><button type="button" class="btn sec" data-video><span class="pl"><svg viewBox="0 0 24 24"><path d="M7 5v14l12-7z"/></svg></span>Watch my video</button><a class="btn" href="#book">Book a free GHL audit</a></div>
+</div></div></header>
 
 <main id="top">
 <section class="hero center"><div class="wrap">
   <h1 class="rv">Build GoHighLevel systems that book calls on autopilot.</h1>
   <p class="lede rv">Workflows, AI agents, calendars and A2P, built inside your GHL sub-account. New leads get a reply in seconds, no-shows get chased, and your pipeline updates itself.</p>
   <div class="hcta rv"><a class="btn" href="#book">Book a free GHL audit</a><button type="button" class="btn sec" data-video><span class="pl"><svg viewBox="0 0 24 24"><path d="M7 5v14l12-7z"/></svg></span>Watch my video</button></div>
-  <div class="orrow rv"><span>or skip the form and email me directly</span><span class="copyc">am03083234711@gmail.com<button type="button" id="copy">Copy</button></span></div>
+  <div class="orrow rv"><span>or skip the form and email me directly</span><span class="copyc">ahmedmasoodnaqvi@gmail.com<button type="button" id="copy">Copy</button></span></div>
   <div class="machine rv" id="machine" role="img" aria-label="Illustration: leads drop from an ad into a funnel, travel through a GHL workflow and land as booked calls on a calendar"></div>
 </div></section>
 
@@ -710,7 +758,7 @@ dialog.dm[open]{animation:pin .45s var(--ease)}
         <ul class="cov"><li><i style="background:#FFC93C"></i>Your workflows and triggers</li><li><i style="background:#3B82F6"></i>Calendars and the booking flow</li><li><i style="background:#8B5CF6"></i>Pipelines and opportunity stages</li><li><i style="background:#22C55E"></i>Phone numbers, SMS and A2P status</li><li><i style="background:#FF6B6B"></i>What to automate first</li></ul>
         <p class="cnote">You leave with a prioritised fix list, whether we work together or not.</p></div>
       <div class="bcard req" id="req" hidden><h3>Your request</h3><p id="reqtxt"></p><button type="button" class="btn sec s" id="reqcopy">Copy it</button><small>Paste it into the booking notes so I can prepare before the call.</small></div>
-      <div class="bcard mailc"><h3>Prefer email?</h3><p>Tell me what you want automated and I’ll get back to you with next steps.</p><a class="btn sec s" href="mailto:am03083234711@gmail.com">am03083234711@gmail.com</a></div>
+      <div class="bcard mailc"><h3>Prefer email?</h3><p>Tell me what you want automated and I’ll get back to you with next steps.</p><a class="btn sec s" href="mailto:ahmedmasoodnaqvi@gmail.com">ahmedmasoodnaqvi@gmail.com</a></div>
     </aside>
     <div class="calwrap">
       <!-- Calendly inline widget begin -->
@@ -728,7 +776,7 @@ dialog.dm[open]{animation:pin .45s var(--ease)}
     <div><a class="logo" href="#top" style="padding:0;color:var(--ink)"><span class="blob"></span>Ahmed Masood</a><p style="color:var(--mute);font-size:14.5px;margin-top:14px;max-width:280px">GoHighLevel automation expert. Workflows, AI agents, calendars and A2P, built inside your sub-account.</p></div>
     <div><h4>Client builds</h4><div id="f-builds"></div></div>
     <div><h4>Automations</h4><div id="f-autos"></div></div>
-    <div><h4>Work with me</h4><a href="#book">Book a free GHL audit</a><button type="button" data-video>Watch my video</button><a href="mailto:am03083234711@gmail.com">Email me</a><a href="#process">Process</a></div>
+    <div><h4>Work with me</h4><a href="#book">Book a free GHL audit</a><button type="button" data-video>Watch my video</button><a href="mailto:ahmedmasoodnaqvi@gmail.com">Email me</a><a href="#process">Process</a></div>
     <div><h4>Legal</h4><a href="#">Privacy policy</a><a href="#">Terms of service</a><a href="#">SMS terms</a></div>
   </div>
   <div class="fbot"><span>© 2026 Ahmed Masood</span><span>Built in Karachi · Working with clients worldwide</span></div>
@@ -739,7 +787,7 @@ dialog.dm[open]{animation:pin .45s var(--ease)}
 
 <script>
 /* ===== SETTINGS: paste your Loom share link and (optionally) a GHL inbound webhook URL ===== */
-const CFG={loom:'',webhook:'',email:'am03083234711@gmail.com'};
+const CFG={loom:'',webhook:'',email:'ahmedmasoodnaqvi@gmail.com'};
 const $=(s,c=document)=>c.querySelector(s),$$=(s,c=document)=>[...c.querySelectorAll(s)],G=id=>document.getElementById(id);
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches,sleep=ms=>new Promise(r=>setTimeout(r,RM?0:ms));
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -1304,6 +1352,14 @@ safe('closing3d',()=>{const host=G('c3d');
  sec.addEventListener('pointerleave',()=>{tx=0;ty=0;if(!raf)raf=requestAnimationFrame(step)})});
 
 G('reqcopy').onclick=async()=>{const b=G('reqcopy');try{await navigator.clipboard.writeText(G('reqtxt').textContent);b.textContent='Copied ✓'}catch(e){b.textContent='Select the text to copy'}setTimeout(()=>b.textContent='Copy it',2200)};
+
+/* ---------- mobile menu ---------- */
+safe('burger',()=>{const bt=G('burger'),m=G('mnav'),nav=G('nav');
+ const set=o=>{m.hidden=!o;bt.setAttribute('aria-expanded',o);bt.setAttribute('aria-label',o?'Close menu':'Open menu');nav.classList.toggle('mopen',o);document.body.classList.toggle('noscroll',o)};
+ bt.addEventListener('click',()=>set(m.hidden));
+ m.addEventListener('click',e=>{if(e.target.closest('a,button'))set(false)});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!m.hidden){set(false);bt.focus()}});
+ addEventListener('resize',()=>{if(innerWidth>1080&&!m.hidden)set(false)})});
 
 
 </script></body></html>
