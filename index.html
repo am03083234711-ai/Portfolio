@@ -487,10 +487,19 @@ h1,h2,h3,h4{font-weight:700;letter-spacing:-.035em;text-wrap:balance;line-height
 
 /* process + faq */
 .pgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:40px}
-.pc{border-radius:24px;padding:22px;min-height:230px;display:flex;flex-direction:column;gap:10px;border:1px solid rgba(20,20,20,.06)}
-.pc .o{width:44px;height:44px;border-radius:50%;box-shadow:inset -6px -7px 0 rgba(0,0,0,.12)}
-.pc h3{font-size:20px;letter-spacing:-.02em}
-.pc p{font-size:14.5px;color:var(--ink2);line-height:1.5}
+.pc{--mx:50%;--my:0%;position:relative;border-radius:26px;padding:16px 20px 20px;display:flex;flex-direction:column;gap:8px;background:radial-gradient(260px 200px at var(--mx) var(--my),rgba(255,255,255,.7),transparent 70%),var(--bgc);border:1px solid rgba(255,255,255,.9);box-shadow:inset 0 1px 0 #fff,inset 0 -3px 0 rgba(20,20,20,.04),0 1px 2px rgba(20,20,20,.05),0 28px 40px -30px color-mix(in srgb,var(--c) 70%,#141414);transition:transform .35s var(--ease),box-shadow .35s var(--ease);transform-style:preserve-3d;will-change:transform}
+.pc:hover{box-shadow:inset 0 1px 0 #fff,0 2px 4px rgba(20,20,20,.05),0 40px 50px -30px color-mix(in srgb,var(--c) 80%,#141414)}
+.pc .ob{height:118px;margin:0 -6px 4px;transform:translateZ(40px)}
+.pc .ob svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 10px 10px rgba(20,20,20,.12))}
+.pc .flo{transform-box:fill-box;transform-origin:center;animation:flo 5s ease-in-out infinite}
+.pc:nth-child(2) .flo{animation-delay:-1s}.pc:nth-child(3) .flo{animation-delay:-2s}.pc:nth-child(4) .flo{animation-delay:-3s}.pc:nth-child(5) .flo{animation-delay:-4s}
+@keyframes flo{50%{transform:translateY(-6px) rotate(-1.5deg)}}
+.pc .ph3{align-self:flex-start;font:800 11.5px Manrope,system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:color-mix(in srgb,var(--c) 70%,#141414);background:rgba(255,255,255,.75);border-radius:999px;padding:4px 10px;transform:translateZ(20px)}
+.pc h3{font-size:20px;letter-spacing:-.02em;transform:translateZ(24px)}
+.pc p{font-size:14.5px;color:var(--ink2);line-height:1.5;transform:translateZ(14px)}
+.pc .get{margin-top:auto;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.8);border-radius:14px;padding:9px 11px;font:700 13px/1.3 Manrope,system-ui,sans-serif;box-shadow:0 6px 14px -10px rgba(20,20,20,.35);transform:translateZ(30px)}
+.pc .get i{width:16px;height:16px;flex:none;border-radius:50%;background:var(--c);position:relative}
+.pc .get i::after{content:"";position:absolute;left:5px;top:3px;width:4px;height:7px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
 .faq{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:40px;align-items:start}
 .faq details{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px 22px;transition:border-color .25s}
 .faq details[open]{border-color:var(--ink)}
@@ -504,8 +513,32 @@ h1,h2,h3,h4{font-weight:700;letter-spacing:-.035em;text-wrap:balance;line-height
 .closing{background:var(--ink);color:#fff;border-radius:40px;margin:0 16px;padding:100px 0 110px;overflow:hidden;position:relative}
 .closing .lede{color:#C9C4BB}
 .closing .btn{background:#fff;color:var(--ink);border-color:#fff}.closing .btn.sec{background:transparent;color:#fff;border-color:#4a4741}
-.closing .ball{position:absolute;border-radius:50%;box-shadow:inset -10px -12px 0 rgba(0,0,0,.18);animation:bob 6s ease-in-out infinite}
-.bk{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;align-items:start;margin-top:40px}
+.closing{padding:110px 0 90px}
+.cglow{position:absolute;inset:0;background:radial-gradient(500px 300px at 15% 20%,rgba(255,201,60,.16),transparent 70%),radial-gradient(520px 320px at 85% 30%,rgba(34,197,94,.14),transparent 70%),radial-gradient(600px 300px at 50% 110%,rgba(91,155,255,.22),transparent 70%)}
+.c3d{position:absolute;inset:0;pointer-events:none;z-index:1}
+.c3d .o3{position:absolute;filter:drop-shadow(0 24px 22px rgba(0,0,0,.55));animation:flo2 6s ease-in-out infinite}
+.c3d .o3 svg{display:block;width:100%;height:auto;overflow:visible}
+.c3d .b2{animation-duration:7.5s;animation-delay:-2s}.c3d .b3{animation-duration:8.5s;animation-delay:-4s}
+@keyframes flo2{50%{transform:translateY(-14px) rotate(4deg)}}
+.recent{margin-top:44px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.recent>span{font:700 12.5px Manrope,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#8E887E}
+#recent{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+#recent button{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:8px 14px;color:#fff;font:600 14px Manrope,system-ui,sans-serif;cursor:pointer;transition:background .25s,transform .25s var(--ease)}
+#recent button:hover{background:rgba(255,255,255,.14);transform:translateY(-2px)}
+#recent i{width:12px;height:12px;border-radius:50%}
+.bk{display:grid;grid-template-columns:.75fr 1.25fr;gap:24px;align-items:start;margin-top:40px}
+.bside{display:grid;gap:16px}
+.cov{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:12px}
+.cov li{display:flex;align-items:center;gap:12px;font-weight:600;font-size:15px}
+.cov i{width:22px;height:22px;border-radius:50%;flex:none}
+.cnote{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);color:var(--mute);font-size:14px}
+.req p{margin:8px 0 12px;background:var(--bg);border-radius:12px;padding:10px 12px;font-size:14.5px}
+.req small{display:block;color:var(--mute);font-size:12.5px;margin-top:10px}
+.req.flash{animation:flash 1.4s var(--ease)}
+.mailc p{color:var(--mute);font-size:14px;margin:6px 0 12px}.mailc .btn{max-width:100%;overflow:hidden;text-overflow:ellipsis}
+.calwrap{background:#fff;border:1px solid var(--line);border-radius:26px;overflow:hidden;box-shadow:0 30px 60px -40px rgba(20,20,20,.35)}
+.calwrap .calendly-inline-widget{min-height:700px;background:radial-gradient(circle at 50% 40%,var(--bg2),#fff 60%)}
+.calfb{display:block;text-align:center;font:600 13px Manrope,system-ui,sans-serif;color:var(--mute);padding:12px;border-top:1px solid var(--line);text-decoration:none}.calfb:hover{color:var(--ink)}
 .bcard{background:#fff;border:1px solid var(--line);border-radius:26px;padding:26px}
 .bcard h3{font-size:20px;letter-spacing:-.02em;margin-bottom:4px}
 .days{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 18px}.slots{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
@@ -565,7 +598,7 @@ dialog.dm[open]{animation:pin .45s var(--ease)}
  .wrap{padding:0 18px}.stats{grid-template-columns:1fr 1fr}.pgrid{grid-template-columns:1fr}
  .shots{grid-template-columns:1fr}.shot.wfshot{grid-row:auto}
  .panel{padding:16px;border-radius:24px}.ex div{padding:12px}.ex b{font-size:24px}
- .closing{margin:0 8px;border-radius:28px}.machine{border-radius:20px;margin-top:32px;box-shadow:0 20px 40px -30px rgba(30,58,95,.4)}
+ .closing{margin:0 8px;border-radius:28px;padding:80px 0 70px}.c3d .o3{scale:.55}.c3d .o3:nth-child(1){left:-10%!important;top:1%!important}.c3d .o3:nth-child(2){left:-6%!important;top:90%!important}.c3d .o3:nth-child(3){left:76%!important;top:0!important}.c3d .o3:nth-child(4){left:82%!important;top:91%!important}.c3d .o3:nth-child(7){left:90%!important;top:46%!important}.calwrap{order:-1}.c3d .o3:nth-child(5),.c3d .o3:nth-child(6){display:none}.machine{border-radius:20px;margin-top:32px;box-shadow:0 20px 40px -30px rgba(30,58,95,.4)}
  .annc{font-size:13px}
  .copyc{font-size:12.5px}
  .nr .btn{padding:9px 14px;font-size:13px;white-space:nowrap}.logo{font-size:16px;white-space:nowrap}.logo .blob{width:24px;height:24px}
@@ -573,6 +606,11 @@ dialog.dm[open]{animation:pin .45s var(--ease)}
  .tabs{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}.tab{flex:none}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}.rv{opacity:1;transform:none}}
+
+/* clay sphere shading for every colour dot */
+.lbl i,.cmt span i,.st small i,.who i,.pchips button i,.cov i,#recent i,.art .ball{background-image:radial-gradient(circle at 32% 28%,rgba(255,255,255,.95) 0 7%,rgba(255,255,255,.35) 20%,transparent 46%),radial-gradient(circle at 72% 80%,rgba(0,0,0,.28),transparent 62%)!important;box-shadow:inset -2px -3px 4px rgba(0,0,0,.18),0 3px 6px -2px rgba(20,20,20,.35)}
+.art .ball{box-shadow:inset -8px -10px 18px rgba(0,0,0,.22),inset 6px 6px 12px rgba(255,255,255,.35),0 18px 26px -12px rgba(20,20,20,.35);animation:bob 6s ease-in-out infinite}
+.cov i{box-shadow:inset -3px -4px 6px rgba(0,0,0,.2),0 6px 10px -4px rgba(20,20,20,.4)}
 
 .mscroll.swp::after{content:"Swipe to see the full screen →";position:sticky;left:0;display:block;font:600 12px Manrope,system-ui,sans-serif;color:var(--mute);padding:8px 12px;background:var(--bg2);white-space:nowrap}
 </style></head><body>
@@ -636,12 +674,12 @@ dialog.dm[open]{animation:pin .45s var(--ease)}
 
 <section id="process" style="padding-top:20px"><div class="wrap">
   <div class="center"><h2 class="h2 rv">How a GHL build works.</h2><p class="lede rv">You always know what’s being built, why, and when it’s live.</p></div>
-  <div class="pgrid">
-    <div class="pc rv" style="background:var(--butter)"><span class="o" style="background:#FFC93C"></span><h3>Free GHL audit</h3><p>We screen-share through your sub-account: workflows, calendars, pipelines, phone and A2P. You get a prioritised fix list.</p></div>
-    <div class="pc rv" style="background:var(--skyc)"><span class="o" style="background:#3B82F6"></span><h3>Workflow map</h3><p>I map the triggers, actions and pipeline stages for each funnel. You sign off before I build.</p></div>
-    <div class="pc rv" style="background:var(--lav)"><span class="o" style="background:#8B5CF6"></span><h3>Build in your sub-account</h3><p>Workflows, funnels, calendars, Conversation AI and integrations. Native GHL first.</p></div>
-    <div class="pc rv" style="background:var(--mint)"><span class="o" style="background:#22C55E"></span><h3>Test with dummy contacts</h3><p>Every trigger and branch gets tested: SMS delivered, calendar booked, opportunity moved.</p></div>
-    <div class="pc rv" style="background:var(--peach)"><span class="o" style="background:#FF6B6B"></span><h3>Handover</h3><p>Written docs and a recorded walkthrough for every workflow, so your team can run it.</p></div>
+  <div class="pgrid" id="pgrid">
+    <div class="pc rv" data-o="audit" style="--c:#FFC93C;--bgc:var(--butter)"><div class="ob"></div><span class="ph3">Discover</span><h3>Free GHL audit</h3><p>We screen-share through your sub-account: workflows, calendars, pipelines, phone and A2P.</p><div class="get"><i></i>You get a prioritised fix list</div></div>
+    <div class="pc rv" data-o="map" style="--c:#3B82F6;--bgc:var(--skyc)"><div class="ob"></div><span class="ph3">Plan</span><h3>Workflow map</h3><p>I map the triggers, actions and pipeline stages for each funnel before anything gets built.</p><div class="get"><i></i>You sign off on the map</div></div>
+    <div class="pc rv" data-o="build" style="--c:#8B5CF6;--bgc:var(--lav)"><div class="ob"></div><span class="ph3">Build</span><h3>Build in your sub-account</h3><p>Workflows, funnels, calendars, Conversation AI and integrations. Native GHL first.</p><div class="get"><i></i>Everything stays in your account</div></div>
+    <div class="pc rv" data-o="test" style="--c:#22C55E;--bgc:var(--mint)"><div class="ob"></div><span class="ph3">Test</span><h3>Test with dummy contacts</h3><p>Every trigger and branch gets tested: SMS delivered, calendar booked, opportunity moved.</p><div class="get"><i></i>Nothing goes live untested</div></div>
+    <div class="pc rv" data-o="hand" style="--c:#FF6B6B;--bgc:var(--peach)"><div class="ob"></div><span class="ph3">Launch</span><h3>Handover</h3><p>Written docs and a recorded walkthrough for every workflow, so your team can run it.</p><div class="get"><i></i>Docs + video walkthrough</div></div>
   </div>
 </div></section>
 
@@ -657,24 +695,29 @@ dialog.dm[open]{animation:pin .45s var(--ease)}
   </div>
 </div></section>
 
-<section class="closing center" style="padding-bottom:110px">
-  <span class="ball" style="width:120px;height:120px;left:6%;top:18%;background:#FFC93C"></span><span class="ball" style="width:70px;height:70px;left:14%;bottom:14%;background:#3B82F6;animation-delay:-2s"></span><span class="ball" style="width:90px;height:90px;right:8%;top:22%;background:#22C55E;animation-delay:-1s"></span><span class="ball" style="width:54px;height:54px;right:16%;bottom:18%;background:#FF8FC7;animation-delay:-3s"></span>
-  <div class="wrap"><h2 class="h2">Turn your GHL account into a booking machine.</h2><p class="lede">Free audit. No obligation. You keep everything I build.</p><div class="hcta"><a class="btn" href="#book">Book a free GHL audit</a><button type="button" class="btn sec" data-video><span class="pl" style="background:#fff"><svg viewBox="0 0 24 24" style="fill:#141414"><path d="M7 5v14l12-7z"/></svg></span>Watch my video</button></div></div>
+<section class="closing center" id="closing">
+  <div class="cglow"></div>
+  <div class="c3d" id="c3d" aria-hidden="true"></div>
+  <div class="wrap" style="position:relative;z-index:2"><h2 class="h2">Turn your GHL account into a booking machine.</h2><p class="lede">Free audit. No obligation. You keep everything I build.</p><div class="hcta"><a class="btn" href="#book">Book a free GHL audit</a><button type="button" class="btn sec" data-video><span class="pl" style="background:#fff"><svg viewBox="0 0 24 24" style="fill:#141414"><path d="M7 5v14l12-7z"/></svg></span>Watch my video</button></div>
+  <div class="recent"><span>Recent builds</span><div id="recent"></div></div></div>
 </section>
 
 <section id="book"><div class="wrap">
-  <div class="center"><h2 class="h2">Book your free GHL audit.</h2><p class="lede">Pick a time and tell me what you want automated. Times show in your local time.</p></div>
+  <div class="center"><h2 class="h2 rv">Book your free GHL audit.</h2><p class="lede rv">Pick a time that works for you. The calendar shows times in your own time zone.</p></div>
   <div class="bk">
-    <div class="bcard"><h3>My availability</h3><p style="color:var(--mute);font-size:14px;margin-bottom:12px">Karachi time (UTC+5). Pick a slot on the right to request a call.</p><iframe src="https://calendar.google.com/calendar/embed?src=am03083234711%40gmail.com&ctz=Asia%2FKarachi" title="Ahmed’s Google Calendar" style="border:0;width:100%;height:560px;border-radius:16px;display:block" loading="lazy"></iframe></div>
-    <div style="display:grid;gap:20px">
-      <div class="bcard" id="calbox"><h3>Pick a day</h3><div class="days" id="days"></div><h3>Pick a time</h3><div class="slots" id="slots"></div><p style="color:var(--mute);font-size:12px;margin-top:10px" id="tz"></p></div>
-      <form id="f" novalidate class="bcard"><h3>What should I look at?</h3><div class="pick" id="pick">No time picked yet.</div>
-        <label class="l" for="n">Name</label><input class="inp" id="n" autocomplete="name"><div class="err" data-e="n"></div>
-        <label class="l" for="e">Email</label><input class="inp" id="e" type="email" autocomplete="email"><div class="err" data-e="e"></div>
-        <label class="l" for="m">What do you need automated?</label><select class="inp" id="m"><option value="">Choose one</option><option>Lead follow-up workflows</option><option>Conversation AI or Voice AI</option><option>A2P 10DLC / SMS deliverability</option><option>Calendars and booking</option><option>Funnels and pages</option><option>Integrations (Zoom, Sheets, webhooks)</option><option>Full GHL setup from scratch</option></select><div class="err" data-e="m"></div>
-        <label class="l" for="d">Details (optional)</label><textarea class="inp" id="d" placeholder="What you want automated, your niche, your current setup"></textarea>
-        <button class="btn" style="width:100%;margin-top:16px">Book my free GHL audit</button>
-        <div id="ok" role="status" style="color:#0c8a2c;font-weight:700;margin-top:12px"></div></form>
+    <aside class="bside">
+      <div class="bcard cover"><h3>What we’ll cover</h3>
+        <ul class="cov"><li><i style="background:#FFC93C"></i>Your workflows and triggers</li><li><i style="background:#3B82F6"></i>Calendars and the booking flow</li><li><i style="background:#8B5CF6"></i>Pipelines and opportunity stages</li><li><i style="background:#22C55E"></i>Phone numbers, SMS and A2P status</li><li><i style="background:#FF6B6B"></i>What to automate first</li></ul>
+        <p class="cnote">You leave with a prioritised fix list, whether we work together or not.</p></div>
+      <div class="bcard req" id="req" hidden><h3>Your request</h3><p id="reqtxt"></p><button type="button" class="btn sec s" id="reqcopy">Copy it</button><small>Paste it into the booking notes so I can prepare before the call.</small></div>
+      <div class="bcard mailc"><h3>Prefer email?</h3><p>Tell me what you want automated and I’ll get back to you with next steps.</p><a class="btn sec s" href="mailto:am03083234711@gmail.com">am03083234711@gmail.com</a></div>
+    </aside>
+    <div class="calwrap">
+      <!-- Calendly inline widget begin -->
+      <div class="calendly-inline-widget" data-url="https://calendly.com/am03083234711" style="min-width:320px;height:700px;"></div>
+      <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+      <!-- Calendly inline widget end -->
+      <a class="calfb" href="https://calendly.com/am03083234711" target="_blank" rel="noopener">Calendar not loading? Open it on Calendly ↗</a>
     </div>
   </div>
 </div></section>
@@ -1145,8 +1188,8 @@ safe('tabs',()=>{const tabsEl=G('tabs'),panel=G('panel'),DUR=9000;let cur=0,time
  window.goTab=t=>{const i=TABS.indexOf(t);if(i>-1){render(i);tabsEl.classList.add('stop');paused=true;clearTimeout(timer)}G('automations').scrollIntoView({behavior:RM?'auto':'smooth'})}});
 
 /* ---------- prompt module + prefill booking ---------- */
-function prefill(text,need){G('d').value=text;const m=G('m');if(need)m.value=need;else{const t=text.toLowerCase();const map=[[/a2p|10dlc|carrier|deliverab/,'A2P 10DLC / SMS deliverability'],[/voice|ai agent|conversation ai|\bai\b|chatbot|chat/,'Conversation AI or Voice AI'],[/calendar|book|appointment|no-show|no show/,'Calendars and booking'],[/zoom|sheet|webhook|zapier|integrat|api/,'Integrations (Zoom, Sheets, webhooks)'],[/funnel|page|landing|website/,'Funnels and pages'],[/follow|lead|text|sms|nurture|missed/,'Lead follow-up workflows']];const f=map.find(([r])=>r.test(t));if(f)m.value=f[1]}
- G('book').scrollIntoView({behavior:RM?'auto':'smooth'});const card=G('f');card.classList.remove('flash');void card.offsetWidth;card.classList.add('flash');setTimeout(()=>G('n').focus({preventScroll:true}),RM?0:700)}
+function prefill(text){const r=G('req');G('reqtxt').textContent=text;r.hidden=false;
+ G('book').scrollIntoView({behavior:RM?'auto':'smooth'});r.classList.remove('flash');void r.offsetWidth;r.classList.add('flash')}
 safe('prompt',()=>{const ta=G('ptext');
  const EX=[['Text every new Facebook lead within 60 seconds and book them with AI','Speed-to-lead'],['Send a text back when we miss a call, and assign it to the right rep','Missed-call text back'],['Reactivate 3,000 old leads in my CRM with an SMS campaign','Database reactivation']];
  G('pex').innerHTML=EX.map(([t,s])=>`<button type="button" data-ex="${esc(t)}">${ic('ai',16)}<span style="color:var(--ink2)">${esc(t)}</span></button>`).join('');
@@ -1218,20 +1261,49 @@ safe('nav',()=>{const mk=(i,c)=>`<i style="background:${c}"></i>`;
 G('copy').onclick=async()=>{const b=G('copy');try{await navigator.clipboard.writeText(CFG.email);b.textContent='Copied ✓'}catch(e){b.textContent='Select & copy'}setTimeout(()=>b.textContent='Copy',2200)};
 safe('reveal',()=>{const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.12});$$('.rv').forEach(e=>io.observe(e))});
 
-safe('booking',()=>{let selDay=null,selSlot=null;
-  const days=[];for(let i=1;days.length<7;i++){const d=new Date();d.setDate(d.getDate()+i);if(d.getDay()!==0&&d.getDay()!==6)days.push(d)}
-  const HOURS=[11,13,15,17]; /* call hours in Karachi time (UTC+5) */
-  G('tz').textContent='Times shown in your local time ('+Intl.DateTimeFormat().resolvedOptions().timeZone+').';
-  const dEl=G('days'),sEl=G('slots');
-  days.forEach(d=>{const b=document.createElement('button');b.type='button';b.className='opt';b.setAttribute('aria-pressed','false');b.textContent=d.toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short'});b.onclick=()=>{selDay=d;selSlot=null;$$('#days .opt').forEach(x=>x.setAttribute('aria-pressed',x===b));renderSlots();upd()};dEl.appendChild(b)});
-  function renderSlots(){sEl.innerHTML='';HOURS.forEach(h=>{const s=new Date(Date.UTC(selDay.getFullYear(),selDay.getMonth(),selDay.getDate(),h-5));const b=document.createElement('button');b.type='button';b.className='opt';b.setAttribute('aria-pressed','false');b.textContent=s.toLocaleTimeString(undefined,{hour:'numeric',minute:'2-digit'});b.onclick=()=>{selSlot=s;$$('#slots .opt').forEach(x=>x.setAttribute('aria-pressed',x===b));upd()};sEl.appendChild(b)})}
-  function upd(){G('pick').textContent=selSlot?'Your slot: '+selSlot.toLocaleString(undefined,{weekday:'long',day:'numeric',month:'long',hour:'numeric',minute:'2-digit'}):(selDay?'Now pick a time.':'No time picked yet.')}
-  G('f').onsubmit=ev=>{ev.preventDefault();const g=k=>G(k).value.trim(),r={n:g('n')?'':'Enter your name.',e:/^\S+@\S+\.\S+$/.test(g('e'))?'':'Enter a valid email address.',m:g('m')?'':'Choose what you need.'};$$('[data-e]').forEach(x=>x.textContent=r[x.dataset.e]);
-    if(!Object.values(r).every(v=>!v))return;
-    if(!selSlot){G('ok').style.color='#b0243c';G('ok').textContent='Pick a day and time first.';return}
-    G('ok').style.color='#0c8a2c';const payload={name:g('n'),email:g('e'),need:g('m'),slot:selSlot.toISOString(),details:g('d')};
-    if(CFG.webhook){fetch(CFG.webhook,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).then(()=>G('ok').textContent='Request received. I will confirm by email shortly.').catch(()=>{G('ok').style.color='#b0243c';G('ok').textContent='Something went wrong. Please try again.'})}
-    else{G('ok').textContent='Opening your email app to send the request…';location.href='mailto:'+CFG.email+'?subject='+encodeURIComponent('Call request: '+payload.need)+'&body='+encodeURIComponent('Name: '+payload.name+'\nEmail: '+payload.email+'\nSlot: '+selSlot.toString()+'\nDetails: '+payload.details)}}});
+/* ---------- 3D clay objects: process cards ---------- */
+const P3={
+ cube(x,y,s,t,l,r){return`<g stroke-linejoin="round" stroke-width="5"><path d="M${x} ${y}L${x+s} ${y+s/2}L${x} ${y+s}L${x-s} ${y+s/2}Z" fill="${t}" stroke="${t}"/><path d="M${x-s} ${y+s/2}L${x} ${y+s}V${y+2*s}L${x-s} ${y+1.5*s}Z" fill="${l}" stroke="${l}"/><path d="M${x} ${y+s}L${x+s} ${y+s/2}V${y+1.5*s}L${x} ${y+2*s}Z" fill="${r}" stroke="${r}"/></g>`},
+ sph(id,a,b,c){return`<radialGradient id="${id}" cx="34%" cy="28%" r="80%"><stop offset="0" stop-color="${a}"/><stop offset=".55" stop-color="${b}"/><stop offset="1" stop-color="${c}"/></radialGradient>`},
+ lin(id,a,b,v=1){return`<linearGradient id="${id}" x1="0" y1="0" x2="${v?0:1}" y2="${v?1:0}"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`},
+ gnd(cx,w){return`<ellipse cx="${cx}" cy="112" rx="${w}" ry="6" fill="#1E293B" opacity=".14" filter="url(#pblur)"/>`}
+};
+const POBJ={
+ audit:`<defs>${P3.lin('pa1','#FFE38A','#E39A00')}${P3.lin('pa2','#4B5563','#111827',0)}<radialGradient id="pa3" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset=".5" stop-color="#DBEAFE" stop-opacity=".6"/><stop offset="1" stop-color="#93C5FD" stop-opacity=".7"/></radialGradient></defs>${P3.gnd(72,44)}
+  <path d="M84 70 L112 98" stroke="#0B1220" stroke-width="18" stroke-linecap="round" transform="translate(2 3)"/><path d="M84 70 L112 98" stroke="url(#pa2)" stroke-width="16" stroke-linecap="round"/><path d="M88 72 L108 92" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".3"/>
+  <circle cx="62" cy="50" r="32" fill="none" stroke="#B88400" stroke-width="16" transform="translate(3 4)"/><circle cx="62" cy="50" r="24" fill="url(#pa3)"/><circle cx="62" cy="50" r="32" fill="none" stroke="url(#pa1)" stroke-width="16"/>
+  <path d="M42 36 A26 26 0 0 1 60 26" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" opacity=".75"/><path d="M50 44 A14 14 0 0 1 58 38" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" opacity=".8"/>`,
+ map:`<defs>${P3.lin('pm1','#93C5FD','#3B82F6')}</defs>${P3.gnd(70,52)}
+  <path d="M40 34 C 70 34, 96 40, 100 58 M96 66 C 90 84, 60 76, 44 90" stroke="#1D4ED8" stroke-width="7" fill="none" stroke-linecap="round" opacity=".35" transform="translate(2 3)"/><path d="M40 34 C 70 34, 96 40, 100 58 M96 66 C 90 84, 60 76, 44 90" stroke="#BFDBFE" stroke-width="6" fill="none" stroke-linecap="round"/>
+  ${[[12,20],[74,48],[16,80]].map(([x,y],i)=>`<g><rect x="${x}" y="${y+7}" width="50" height="26" rx="10" fill="#1E40AF"/><rect x="${x}" y="${y}" width="50" height="26" rx="10" fill="url(#pm1)"/><rect x="${x+4}" y="${y+3}" width="42" height="6" rx="3" fill="#fff" opacity=".35"/><circle cx="${x+13}" cy="${y+14}" r="5" fill="${['#FFC93C','#22C55E','#FF8FC7'][i]}"/><rect x="${x+22}" y="${y+11}" width="20" height="5" rx="2.5" fill="#fff" opacity=".85"/></g>`).join('')}`,
+ build:`${P3.gnd(70,50)}${P3.cube(56,34,24,'#DDD6FE','#8B5CF6','#6D28D9')}${P3.cube(80,46,24,'#C4B5FD','#7C3AED','#5B21B6')}${P3.cube(56,10,24,'#FFE38A','#FFC93C','#E39A00')}<path d="M44 22 L56 16" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".7"/><path d="M68 52 L80 46" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".5"/>`,
+ test:`<defs>${P3.lin('pt1','#86EFAC','#16A34A')}</defs>${P3.gnd(70,40)}
+  <path d="M70 10 L110 24 V56 C110 82 92 98 70 106 C48 98 30 82 30 56 V24Z" fill="#0F7A37" transform="translate(4 5)"/><path d="M70 10 L110 24 V56 C110 82 92 98 70 106 C48 98 30 82 30 56 V24Z" fill="url(#pt1)"/>
+  <path d="M70 18 L102 29 V56 C102 77 88 90 70 97 C52 90 38 77 38 56 V29Z" fill="#fff" opacity=".12"/><path d="M52 58 l12 12 26-28" stroke="#0F7A37" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(1 3)" opacity=".5"/><path d="M52 58 l12 12 26-28" stroke="#fff" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M40 30 Q 48 26 58 22" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".6"/>`,
+ hand:`${P3.gnd(70,48)}${P3.cube(70,34,34,'#FFC2B8','#FF6B6B','#E0484D')}
+  <path d="M53 42.5 L87 59.5" stroke="#FFC93C" stroke-width="9"/><path d="M87 42.5 L53 59.5" stroke="#FFC93C" stroke-width="9"/><path d="M53 59.5 V93.5" stroke="#E39A00" stroke-width="9" transform="translate(0 0)"/><path d="M87 59.5 V93.5" stroke="#F2B200" stroke-width="9"/>
+  <ellipse cx="60" cy="40" rx="12" ry="8" fill="#FFC93C" transform="rotate(-20 60 40)"/><ellipse cx="80" cy="40" rx="12" ry="8" fill="#F2B200" transform="rotate(20 80 40)"/><circle cx="70" cy="46" r="6" fill="#E39A00"/><ellipse cx="57" cy="37" rx="4" ry="2" fill="#fff" opacity=".6" transform="rotate(-20 57 37)"/>`
+};
+safe('process3d',()=>{$$('#pgrid .pc').forEach(c=>{$('.ob',c).innerHTML=`<svg viewBox="0 0 140 120" aria-hidden="true"><defs><filter id="pblur" x="-50%" y="-200%" width="200%" height="500%"><feGaussianBlur stdDeviation="3"/></filter></defs><g class="flo">${POBJ[c.dataset.o]}</g></svg>`;
+  if(RM||!matchMedia('(hover:hover)').matches)return;
+  c.addEventListener('pointermove',e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transform=`perspective(900px) rotateX(${(-y*10).toFixed(2)}deg) rotateY(${(x*12).toFixed(2)}deg) translateY(-6px)`;c.style.setProperty('--mx',(x+.5)*100+'%');c.style.setProperty('--my',(y+.5)*100+'%')});
+  c.addEventListener('pointerleave',()=>{c.style.transform=''})})});
+
+/* ---------- 3D clay objects: closing CTA ---------- */
+safe('closing3d',()=>{const host=G('c3d');
+ const sphere=(id,a,b,c)=>`<svg viewBox="0 0 100 100"><defs>${P3.sph(id,a,b,c)}<radialGradient id="${id}r" cx="70%" cy="78%" r="40%"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><circle cx="50" cy="50" r="46" fill="url(#${id})"/><circle cx="50" cy="50" r="46" fill="url(#${id}r)"/><ellipse cx="34" cy="30" rx="12" ry="8" fill="#fff" opacity=".7" transform="rotate(-25 34 30)"/></svg>`;
+ const torus=`<svg viewBox="0 0 120 80"><defs>${P3.lin('tz1','#86EFAC','#15803D')}</defs><ellipse cx="60" cy="44" rx="46" ry="24" fill="none" stroke="#0F5F2C" stroke-width="20"/><ellipse cx="60" cy="40" rx="46" ry="24" fill="none" stroke="url(#tz1)" stroke-width="20"/><path d="M24 30 Q 44 18 70 18" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" opacity=".55"/></svg>`;
+ const cube=`<svg viewBox="0 0 100 110">${P3.cube(50,10,38,'#DDD6FE','#8B5CF6','#6D28D9')}<path d="M30 25 L48 16" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".6"/></svg>`;
+ const pill=`<svg viewBox="0 0 120 60"><defs>${P3.lin('pl1','#9CC3FF','#2457D6')}</defs><rect x="6" y="14" width="108" height="40" rx="20" fill="#163C9C"/><rect x="6" y="8" width="108" height="40" rx="20" fill="url(#pl1)"/><rect x="18" y="13" width="70" height="8" rx="4" fill="#fff" opacity=".45"/></svg>`;
+ const O=[[sphere('cs1','#FFF1B8','#FFC93C','#D98E00'),'6%','16%',130,.9,'b1'],[sphere('cs2','#D6E6FF','#5B9BFF','#1E4FC9'),'15%','66%',74,1.6,'b2'],[torus,'83%','12%',120,1.2,'b3'],[sphere('cs3','#FFE0F0','#FF8FC7','#C93D84'),'80%','64%',60,1.8,'b1'],[cube,'26%','8%',58,.6,'b2'],[pill,'85%','80%',90,.8,'b3'],[sphere('cs4','#C9F5D7','#3DD27A','#0F7A37'),'91%','44%',40,2,'b2']];
+ host.innerHTML=O.map(([s,l,t,w,d,b])=>`<div class="o3 ${b}" data-d="${d}" style="left:${l};top:${t};width:${w}px">${s}</div>`).join('');
+ G('recent').innerHTML=PROJ.map(p=>`<button type="button" data-open="${p.id}"><i style="background:${STAGE[p.id][1]}"></i>${esc(p.client)}</button>`).join('');
+ if(RM)return;const sec=G('closing'),items=$$('.o3',host);let tx=0,ty=0,cx=0,cy=0,raf=0;
+ const step=()=>{cx+=(tx-cx)*.08;cy+=(ty-cy)*.08;items.forEach(o=>{const d=+o.dataset.d;o.style.translate=`${(-cx*d*30).toFixed(1)}px ${(-cy*d*20).toFixed(1)}px`});raf=Math.abs(tx-cx)+Math.abs(ty-cy)>.001?requestAnimationFrame(step):0};
+ sec.addEventListener('pointermove',e=>{const r=sec.getBoundingClientRect();tx=(e.clientX-r.left)/r.width-.5;ty=(e.clientY-r.top)/r.height-.5;if(!raf)raf=requestAnimationFrame(step)});
+ sec.addEventListener('pointerleave',()=>{tx=0;ty=0;if(!raf)raf=requestAnimationFrame(step)})});
+
+G('reqcopy').onclick=async()=>{const b=G('reqcopy');try{await navigator.clipboard.writeText(G('reqtxt').textContent);b.textContent='Copied ✓'}catch(e){b.textContent='Select the text to copy'}setTimeout(()=>b.textContent='Copy it',2200)};
 
 
 </script></body></html>
